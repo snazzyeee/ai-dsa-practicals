@@ -1,0 +1,84 @@
+{
+  "verified_at": "2026-10-24T18:10:39.770083+05:30",
+  "machine": "Windows, local user Python and MSYS2 UCRT64 GCC",
+  "files": {
+    "practical_1_expert_system.py": 0,
+    "practical_2_bfs_dfs.py": 0,
+    "practical_3_a_star.py": 0
+  },
+  "checks": [
+    {
+      "command": "python --version",
+      "exit_code": 0,
+      "stdout": "Python 3.14.6\n",
+      "stderr": ""
+    },
+    {
+      "command": "\"C:\\Users\\AMD\\Desktop\\Projects\\College - Academics\\DSA&AI-Practicals\\.venv\\Scripts\\python.exe\" -m pip --version",
+      "exit_code": 0,
+      "stdout": "pip 26.1.2 from C:\\Users\\AMD\\Desktop\\Projects\\College - Academics\\DSA&AI-Practicals\\.venv\\Lib\\site-packages\\pip (python 3.14)\n\n",
+      "stderr": ""
+    },
+    {
+      "command": "\"C:\\Users\\AMD\\Desktop\\Projects\\College - Academics\\DSA&AI-Practicals\\.venv\\Scripts\\python.exe\" -c \"import sys; assert sys.prefix != sys.base_prefix; print(\\\"VENV_OK\\\")\"",
+      "exit_code": 0,
+      "stdout": "VENV_OK\n",
+      "stderr": ""
+    },
+    {
+      "command": "\"C:\\Users\\AMD\\Desktop\\Projects\\College - Academics\\DSA&AI-Practicals\\.venv\\Scripts\\python.exe\" -c \"from collections import deque; import heapq, math; q=deque([1,2]); assert q.popleft()==1; h=[3,1,2]; heapq.heapify(h); assert heapq.heappop(h)==1; assert math.isqrt(16)==4; assert input()==\\\"lab\\\"; print(\\\"PYTHON_STDLIB_INPUT_OK\\\")\"",
+      "exit_code": 0,
+      "stdout": "PYTHON_STDLIB_INPUT_OK\n",
+      "stderr": ""
+    },
+    {
+      "command": "\"C:\\Users\\AMD\\Desktop\\Projects\\College - Academics\\DSA&AI-Practicals\\.venv\\Scripts\\python.exe\" \"C:\\Users\\AMD\\Desktop\\Projects\\College - Academics\\DSA&AI-Practicals\\AI\\practical_1_expert_system.py\"",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": "\"C:\\Users\\AMD\\Desktop\\Projects\\College - Academics\\DSA&AI-Practicals\\.venv\\Scripts\\python.exe\" \"C:\\Users\\AMD\\Desktop\\Projects\\College - Academics\\DSA&AI-Practicals\\AI\\practical_2_bfs_dfs.py\"",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": "\"C:\\Users\\AMD\\Desktop\\Projects\\College - Academics\\DSA&AI-Practicals\\.venv\\Scripts\\python.exe\" \"C:\\Users\\AMD\\Desktop\\Projects\\College - Academics\\DSA&AI-Practicals\\AI\\practical_3_a_star.py\"",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": "gcc --version",
+      "exit_code": 0,
+      "stdout": "gcc (Rev5, Built by MSYS2 project) 16.1.0\nCopyright (C) 2026 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+      "stderr": ""
+    },
+    {
+      "command": "gcc -dumpmachine",
+      "exit_code": 0,
+      "stdout": "x86_64-w64-mingw32\n",
+      "stderr": ""
+    },
+    {
+      "command": "gcc -std=c17 -Wall -Wextra -Werror -pedantic \"C:\\Users\\AMD\\Desktop\\Projects\\College - Academics\\DSA&AI-Practicals\\work\\compiler_check.c\" -o \"C:\\Users\\AMD\\Desktop\\Projects\\College - Academics\\DSA&AI-Practicals\\work\\compiler_check.exe\"",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": "\"C:\\Users\\AMD\\Desktop\\Projects\\College - Academics\\DSA&AI-Practicals\\work\\compiler_check.exe\"",
+      "exit_code": 0,
+      "stdout": "C_INPUT_MEMORY_POINTERS_FILE_IO_OK\n",
+      "stderr": ""
+    }
+  ],
+  "all_passed": true,
+  "notes": [
+    "py -0p reported: No installed Pythons found! Use python or .venv\\Scripts\\python.exe.",
+    "Initial ensurepip hit a sandbox temporary-directory PermissionError; succeeded using workspace work/temp for TEMP and TMP.",
+    "No third-party Python packages added; no global PATH edits or compiler reinstall needed.",
+    "Manual scope checked visually: AI PDF pages 6-8, DSA PDF pages 5-8. Full manual programs were not executed."
+  ]
+}
