@@ -1,16 +1,22 @@
-// Title: Implementation of a Hash Table-Based Telephone Directory Using Collision Resolution Techniques
+// Title: Hash Table-Based Telephone Directory
 //
 // Problem statement:
-// Implement a telephone book for N clients using a hash table to quickly look up a client's
-// telephone number. Handle collisions using linear probing, quadratic probing, and double
-// hashing.
+// Store clients' names and phone numbers using a hash table.
+// Handle collisions using linear probing, quadratic probing and double hashing.
 
 #include <stdio.h>
-#include <stdbool.h>
+#include <string.h>
+
 #define MAX 7
 
+// client IDs are the keys; the other arrays hold the matching details.
+int H[MAX];
+int occupied[MAX];
+char names[MAX][31];
+char phones[MAX][11];
+
 int h1(int key){
-    return key%MAX;
+    return key % MAX;
 }
 
 int h2(int key){
@@ -20,90 +26,136 @@ int h2(int key){
 int sqr(int x){
     return x*x;
 }
-// idk how to make the hash table
-// use of struct?? or array?
-
-typedef struct {
-    int clientId; // basically the key.
-    char name[31];
-    char phone[11];
-    bool occupied;
-} Client;
-
-Client hash_table[MAX] = {0};
 
 int linearProb(int key, int i){
-    // i denotes the interation, so the caller function
-    // would have to send over the value of i as well
-    // how to increment the value of i over each iteration?
     return (h1(key) + i) % MAX;
-    
 }
+
 int quadProb(int key, int i){
     return (h1(key) + sqr(i)) % MAX;
-    
 }
+
 int doubleHash(int key, int i){
-    return (h1(key) + i * h2(key)) % MAX;  
+    return (h1(key) + i * h2(key)) % MAX;
 }
 
-void linearinsertion(int key){
-    int idx;
-    for(int i = 0; i<MAX; i++){
-    idx = linearProb(key, i);
-    }
-
-    // first take the data from the user (client id) linked with the respective phone number and name.
-    // client id will be treated as key.
-
-    // where am i taking the client id from the user?
-
-    // need to get client id.
-
-    if(// condition?){
-        Store the client ID, name and phone number.
-        Mark the slot as occupied.
-        Report success and stop.
-    }
-
-    else if(occupied==1){ 
-        // use linearProb
-    }
-// if no usable spot found, report that insertion failed.
+int probe(int key, int i, int method){
+    if(method == 1) return linearProb(key, i);
+    if(method == 2) return quadProb(key, i);
+    if(method == 3) return doubleHash(key, i);
 }
 
-void ui(int ele){
-    int opt;
-    
+// returns 0 if input fails; otherwise the menu can continue.
+int insertClient(int method){
+    // gets client data from the user, iterates over collisions if any and calls probe(,,method)
+    int key;
+    char name[100], phone[100];
+
+    printf("Enter client ID (non-negative): ");
+    if(scanf("%d", &key) != 1 || key < 0){
+        printf("Invalid client ID.\n");
+        return 0;
+    }
+
+    printf("Enter client name: ");
+    if(scanf("%99s", name) != 1 || strlen(name) > 30){
+        printf("Invalid name.\n");
+        return 0;
+    }
+
+    printf("Enter phone: ");
+    if(scanf("%99s", phone) != 1 || strlen(phone) > 10 ||
+       strspn(phone, "0123456789") != strlen(phone)){
+        printf("Invalid phone number.\n");
+        return 0;
+    }
+
+    // i is the attempt number, try another slot when there is a collision.
+    for(int i = 0; i < MAX; i++){
+        int idx = probe(key, i, method);
+
+        // an existing ID is updated instead of adding a duplicate.
+        if(occupied[idx] == 0 || H[idx] == key){
+            H[idx] = key;
+            strcpy(names[idx], name);
+            strcpy(phones[idx], phone);
+            occupied[idx] = 1;
+            printf("Client stored at index %d.\n", idx);
+            return 1;
+        }// if occupied == 1 then i increments anyways
+    }
+
+    // shortcut: quadratic probing may miss empty slots; use another method for full coverage.
+    printf("No available slot found by this probing method.\n");
+    return 1;
+}
+
+int searchClient(int key, int method){
+    // search follows the same sequence used while inserting the key.
+    for(int i = 0; i < MAX; i++){
+        int idx = probe(key, i, method);
+        if(occupied[idx] == 0) return -1;
+        if(H[idx] == key) return idx;
+    }
+    return -1;
+}
+
+void display(){
+    for(int i = 0; i < MAX; i++){
+        if(occupied[i] == 1){
+            printf("%d: ID %d | %s | %s\n", i, H[i], names[i], phones[i]);
+        }else{
+            printf("%d: Empty\n", i);
+        }
+    }
+}
+
+int main(void){
+    int method, opt, key;
+
+    printf("Choose a collision handling method:\n");
+    printf("1: Linear Probing\n2: Quadratic Probing\n3: Double Hashing\n");
+    if(scanf("%d", &method) != 1 || method < 1 || method > 3){
+        printf("Invalid method.\n");
+        return 1;
+    }
+
+    // use one method for this table, so search retraces insertion's steps.
     do{
-        printf("Which sorting technique do you wanna use?: \n");
-        printf("1: Linear Probing \n");
-        printf("2: Quadratic Probing \n");
-        printf("3: Double Hashing \n");
-        printf("4: Exit. \n");
-        scanf("%d", &opt);
+        printf("\n1: Add or update client\n2: Search by client ID\n3: Display table\n4: Exit\n");
+        if(scanf("%d", &opt) != 1){
+            printf("Invalid option.\n");
+            return 1;
+        }
 
         switch(opt){
             case 1:
-            
-            break;
-            case 2:
-            
-            break;
+                if(!insertClient(method)) return 1;
+                break;
+            case 2: {
+                printf("Enter client ID: ");
+                if(scanf("%d", &key) != 1 || key < 0){
+                    printf("Invalid client ID.\n");
+                    return 1;
+                }
+                int idx = searchClient(key, method);
+                if(idx == -1){
+                    printf("Client not found.\n");
+                }else{
+                    printf("Name: %s | Phone: %s\n", names[idx], phones[idx]);
+                }
+                break;
+            }
             case 3:
-            
-            break;
+                display();
+                break;
             case 4:
-            opt = 4;
-            break;
+                printf("Exited.\n");
+                break;
             default:
-            printf("Enter valid input.\n");
-            
+                printf("Enter a valid option.\n");
         }
     }while(opt != 4);
-}
 
-int main(){
-    int ele = noOfele();
-    ui(ele);
+    return 0;
 }
