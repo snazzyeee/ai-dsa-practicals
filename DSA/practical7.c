@@ -28,26 +28,45 @@ typedef struct {
 
 // PRACTICE: initialize the queue before taking orders.
 void initialize(Queue *q){
-    (void)q;
-    printf("TODO: initialize the queue.\n");
+    q->front = 0;
+    q->rear = 0;
+    q->count = 0;
 }
 
 // PRACTICE: add an order unless the queue has reached capacity.
 void enqueue(Queue *q, int order, int capacity){
-    (void)q; (void)order; (void)capacity;
-    printf("TODO: enqueue the order.\n");
+    if(q->count == capacity){
+        printf("Queue is full.\n");
+        return;
+    }
+    q->orders[q->rear] = order;
+    q->rear = (q->rear + 1) % capacity;
+    q->count++;
+    printf("Order %d added.\n", order);
 }
 
 // PRACTICE: serve the oldest order, or report an empty queue.
 void dequeue(Queue *q, int capacity){
-    (void)q; (void)capacity;
-    printf("TODO: dequeue the order.\n");
+    if(q->count == 0){
+        printf("Queue is empty.\n");
+        return;
+    }
+    printf("Serving order %d.\n", q->orders[q->front]);
+    q->front = (q->front + 1) % capacity;
+    q->count--;
 }
 
 // PRACTICE: display the orders from oldest to newest.
 void displayQueue(const Queue *q, int capacity){
-    (void)q; (void)capacity;
-    printf("TODO: display the queue.\n");
+    if(q->count == 0){
+        printf("Queue is empty.\n");
+        return;
+    }
+    printf("Orders: ");
+    for(int i = 0; i < q->count; i++){
+        printf("%d ", q->orders[(q->front + i) % capacity]);
+    }
+    printf("\n");
 }
 
 int main(void){
