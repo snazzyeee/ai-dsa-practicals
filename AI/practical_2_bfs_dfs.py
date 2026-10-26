@@ -44,14 +44,49 @@ def neighbors(maze, position):
 # start to goal, or [] if there is no path. expanded counts positions removed
 # from the queue for exploration.
 def bfs(maze, start, goal):
-    raise NotImplementedError("TODO: write BFS")
+    queue = deque([start])
+    parent = {start: None}
+    expanded = 0
+
+    while queue:
+        current = queue.popleft()
+        expanded += 1
+        if current == goal:
+            return build_path(parent, goal), expanded
+        for position in neighbors(maze, current):
+            if position not in parent:
+                parent[position] = current
+                queue.append(position)
+    return [], expanded
 
 
 # PRACTICE: use a stack or recursion to explore the maze with DFS.
 # Return (path, expanded) using the same rules as BFS. For recursion, count
 # positions when first explored.
 def dfs(maze, start, goal):
-    raise NotImplementedError("TODO: write DFS")
+    stack = [start]
+    parent = {start: None}
+    expanded = 0
+
+    while stack:
+        current = stack.pop()
+        expanded += 1
+        if current == goal:
+            return build_path(parent, goal), expanded
+        for position in neighbors(maze, current):
+            if position not in parent:
+                parent[position] = current
+                stack.append(position)
+    return [], expanded
+
+
+def build_path(parent, goal):
+    path = []
+    current = goal
+    while current is not None:
+        path.append(current)
+        current = parent[current]
+    return path[::-1]
 
 
 def show_maze(maze, path, start, goal):
