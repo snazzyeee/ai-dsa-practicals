@@ -6,99 +6,64 @@
 
 #include <stdio.h>
 
-int noOfele(){
-    int n;
-    printf("Enter number of elements of array: \n");
-    scanf("%d", &n);
-    return n;
-}
-void inputUserArr(int ele, int userArr[]){
-    int i;
-    printf("Enter elements of original (unsorted) array: \n");
-    for(i = 0; i < ele; i++){
-        scanf("%d", &userArr[i]);
-    }
-
-}
-void displaySorted(int ele, int sortedArr[]){
-    for(int i = 0; i < ele; i++){
-        printf("%d\n", sortedArr[i]);
-    }
-}
-
-
-
-void selectionSort(int n, int oArr[]){
-//selectionsort algo
-
-for (int i = 0; i < n - 1; i++) {
-    int smol = i;
-
-    for (int j = i + 1; j < n; j++) {
-        if (oArr[j] < oArr[smol]) {
-            smol = j;
+void selectionSort(int n, float arr[]){
+    for(int i = 0; i < n - 1; i++){
+        int smol = i;
+        for(int j = i + 1; j < n; j++){
+            if(arr[j] < arr[smol]) smol = j;
         }
-    }//keeps checking from after 'i'
-
-    int temp = oArr[i];
-    oArr[i] = oArr[smol];
-    oArr[smol] = temp;
-}
+        float temp = arr[i];
+        arr[i] = arr[smol];
+        arr[smol] = temp;
+    }
 }
 
-void bubbleSort(int n, int oArr[]){
-
-//bubblesort algo
-for(int i = 0; i < n-1; i++){
-    for(int j = 0; j < n-i-1; i++){
-                       /*^represents the remaining part towards the right of the currently selected index*/
-        if(oArr[j]>oArr[j+1]){
-            int temp = oArr[j];
-            oArr[j] = oArr[j+1];
-            oArr[j+1]= temp;
+void bubbleSort(int n, float arr[]){
+    for(int i = 0; i < n - 1; i++){
+        for(int j = 0; j < n - i - 1; j++){
+            if(arr[j] > arr[j + 1]){
+                float temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
         }
     }
 }
 
+void displaySorted(int n, const float arr[]){
+    printf("Sorted percentages: ");
+    for(int i = 0; i < n; i++) printf("%.2f ", arr[i]);
+    printf("\nTop scores: ");
+    for(int i = n - 1; i >= 0 && i >= n - 5; i--) printf("%.2f ", arr[i]);
+    printf("\n");
 }
 
+int main(void){
+    int n, opt;
+    printf("Enter number of students (1-1000): ");
+    if(scanf("%d", &n) != 1 || n < 1 || n > 1000) return 1;
+    float original[n], sorted[n];
 
-void ui(){
-    int opt;
-    int ele = 0;
-    ele = noOfele();
-    int userArr[ele];
-    inputUserArr(ele, userArr);
+    printf("Enter student percentages:\n");
+    for(int i = 0; i < n; i++){
+        if(scanf("%f", &original[i]) != 1 || !(original[i] >= 0 && original[i] <= 100)){
+            printf("Invalid percentage.\n");
+            return 1;
+        }
+    }
+
     do{
-        printf("Which sorting technique do you wanna use?: \n");
-        printf("1: Selection Sort \n");
-        printf("2: Bubble Sort \n");
-        printf("3: Display Array \n");
-        printf("4: Exit \n");
-        scanf("%d", &opt);
-
-        switch(opt){
-            case 1:
-            selectionSort(ele, userArr);
-            break;
-            case 2:
-            bubbleSort(ele, userArr);
-            break;
-            case 3:
-            displaySorted(ele, userArr);
-            break;
-            case 4:
-            opt = 4;
-            break;
-            default:
-            printf("Enter valid input.\n");
-            
+        printf("\n1: Selection Sort  2: Bubble Sort  3: Exit\n");
+        if(scanf("%d", &opt) != 1) return 1;
+        if(opt == 1 || opt == 2){
+            // start each method with the original unsorted values.
+            for(int i = 0; i < n; i++) sorted[i] = original[i];
+            if(opt == 1) selectionSort(n, sorted);
+            else bubbleSort(n, sorted);
+            displaySorted(n, sorted);
+        }else if(opt != 3){
+            printf("Invalid option.\n");
         }
-
-    }while(opt != 4);
-}
-
-int main(){
-    ui();
+    }while(opt != 3);
     return 0;
 }
