@@ -42,7 +42,7 @@ int doubleHash(int key, int i){
 int probe(int key, int i, int method){
     if(method == 1) return linearProb(key, i);
     if(method == 2) return quadProb(key, i);
-    if(method == 3) return doubleHash(key, i);
+    return doubleHash(key, i); // main only allows methods 1, 2 and 3.
 }
 
 // returns 0 if input fails; otherwise the menu can continue.
