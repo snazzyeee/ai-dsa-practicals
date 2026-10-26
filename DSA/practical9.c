@@ -23,21 +23,37 @@
 // PRACTICE: represent each direct flight and its cost in the matrix.
 // This practice menu uses two-way flights and positive costs.
 void addFlight(int graph[MAX][MAX], int from, int to, int cost){
-    (void)graph; (void)from; (void)to; (void)cost;
-    printf("TODO: add the flight.\n");
+    graph[from][to] = cost;
+    graph[to][from] = cost;
+    printf("Flight added.\n");
 }
 
 // PRACTICE: print the cities and their connected cities with costs.
 void displayGraph(int n, char cities[MAX][31], int graph[MAX][MAX]){
-    (void)n; (void)cities; (void)graph;
-    printf("TODO: display the graph.\n");
+    for(int i = 0; i < n; i++){
+        printf("%s:", cities[i]);
+        for(int j = 0; j < n; j++){
+            if(graph[i][j] != 0) printf(" %s(%d)", cities[j], graph[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+void dfs(int n, int graph[MAX][MAX], int city, int visited[]){
+    visited[city] = 1;
+    for(int next = 0; next < n; next++){
+        if(graph[city][next] != 0 && !visited[next]) dfs(n, graph, next, visited);
+    }
 }
 
 // PRACTICE: use DFS or BFS; return 1 if every city is reachable, otherwise 0.
 int isConnected(int n, int graph[MAX][MAX]){
-    (void)n; (void)graph;
-    printf("TODO: check connectivity.\n");
-    return -1;
+    int visited[MAX] = {0};
+    dfs(n, graph, 0, visited);
+    for(int i = 0; i < n; i++){
+        if(!visited[i]) return 0;
+    }
+    return 1;
 }
 
 int main(void){
