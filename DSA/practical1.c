@@ -9,29 +9,33 @@
 
 #include <stdio.h>
 
-void store_roll_no_l(int n, int stud[]){
+int store_roll_no_l(int n, int stud[]){
     
     printf("Enter each student's roll-no: \n");
     for(int i = 0; i < n; i++){
-        scanf("%d", &stud[i]);
+        if(scanf("%d", &stud[i]) != 1) return 0;
     }
+    return 1;
 
 }
 
-void store_roll_no_b(int n, int stud[]){
+int store_roll_no_b(int n, int stud[]){
     
     printf("Enter each student's roll-no in ascending (sorted-array): \n");
     for(int i = 0; i < n; i++){
-        scanf("%d", &stud[i]);
+        if(scanf("%d", &stud[i]) != 1) return 0;
+        if(i > 0 && stud[i] < stud[i - 1]){
+            printf("Roll numbers must be in ascending order.\n");
+            return 0;
+        }
     }
+    return 1;
 
 }
 
-int ask_target(){
-    int tgt;
+int ask_target(int *tgt){
     printf("Input target: \n");
-    scanf("%d", &tgt);
-    return tgt;
+    return scanf("%d", tgt) == 1;
 
 }
 
@@ -76,6 +80,7 @@ void displaystud(int n, int stud[]){
 
 void ui(int n, int stud[]){
     int opt;
+    int hasData = 0;
     int idx;
     int target;
     do{
@@ -84,12 +89,13 @@ void ui(int n, int stud[]){
         printf("2: Binary Search \n");
         printf("3: Display Array \n");
         printf("4: Exit \n");
-        scanf("%d", &opt);
+        if(scanf("%d", &opt) != 1) return;
 
         switch(opt){
             case 1:
-            store_roll_no_l(n, stud);
-            target = ask_target();
+            if(!store_roll_no_l(n, stud)) return;
+            hasData = 1;
+            if(!ask_target(&target)) return;
             idx = linearS(target, n, stud);
             if(idx != -1){
             printf("Found at index %d\n", idx);
@@ -97,8 +103,9 @@ void ui(int n, int stud[]){
             }
             break;
             case 2:
-            store_roll_no_b(n, stud);
-            target = ask_target();
+            if(!store_roll_no_b(n, stud)) return;
+            hasData = 1;
+            if(!ask_target(&target)) return;
             idx = binaryS(target, n, stud);
             if(idx != -1){
             printf("Found at index %d\n", idx);
@@ -106,7 +113,8 @@ void ui(int n, int stud[]){
             }
             break;
             case 3:
-            displaystud(n, stud);
+            if(hasData) displaystud(n, stud);
+            else printf("No roll numbers entered yet.\n");
             break;
             case 4:
             opt = 4;
@@ -125,8 +133,7 @@ int main(){
 
     int n; //stores the number of roll numbers needed to be stored. 
     printf("How many roll numbers do you want to store?\n");
-    scanf("%d", &n);
-    if(n > 1000 || n < 1){
+    if(scanf("%d", &n) != 1 || n > 1000 || n < 1){
         printf("Please enter an integer between 1-1000.");
         return -1;
     }
