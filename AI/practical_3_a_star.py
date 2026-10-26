@@ -39,7 +39,7 @@ def neighbors(maze, position):
 
 # PRACTICE: return the Manhattan distance between two positions.
 def heuristic(position, goal):
-    raise NotImplementedError("TODO: write the heuristic")
+    return abs(position[0] - goal[0]) + abs(position[1] - goal[1])
 
 
 # PRACTICE: use heapq for the frontier, with f = g + h.
@@ -47,7 +47,30 @@ def heuristic(position, goal):
 # from start to goal, or [] if there is no path. expanded counts positions
 # removed from the heap and explored; don't count stale entries.
 def a_star(maze, start, goal):
-    raise NotImplementedError("TODO: write A*")
+    frontier = [(heuristic(start, goal), 0, start)]
+    cost = {start: 0}
+    parent = {start: None}
+    expanded = 0
+
+    while frontier:
+        _, distance, current = heapq.heappop(frontier)
+        if distance != cost[current]:
+            continue
+        expanded += 1
+        if current == goal:
+            path = []
+            while current is not None:
+                path.append(current)
+                current = parent[current]
+            return path[::-1], expanded
+
+        for position in neighbors(maze, current):
+            new_cost = distance + 1
+            if position not in cost or new_cost < cost[position]:
+                cost[position] = new_cost
+                parent[position] = current
+                heapq.heappush(frontier, (new_cost + heuristic(position, goal), new_cost, position))
+    return [], expanded
 
 
 def show_maze(maze, path, start, goal):
