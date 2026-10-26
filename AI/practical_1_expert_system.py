@@ -24,7 +24,7 @@ RULES = [
 # PRACTICE: check which rules match the user's symptoms.
 # Return a list of matching results, or an empty list if none match.
 def diagnose(symptoms, rules):
-    raise NotImplementedError("TODO: write your rule-matching logic")
+    return [result for required, result in rules if required <= symptoms]
 
 
 def main():
