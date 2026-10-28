@@ -6,8 +6,6 @@
 
 import heapq
 
-PRACTICE_MODE = True  # change to False to use the full-program area at the bottom
-
 # 0 is a path, 1 is a wall; positions are (row, column).
 MAZE = [
     [0, 0, 0, 0, 0],
@@ -21,56 +19,45 @@ GOAL = (4, 4)
 
 
 def neighbors(maze, position):
-    row, col = position
-    for dr, dc in ((-1, 0), (1, 0), (0, -1), (0, 1)):
-        next_row, next_col = row + dr, col + dc
+    row, col = position  # Split the current position into row and column.
+    for dr, dc in ((-1, 0), (1, 0), (0, -1), (0, 1)):  # Try four directions.
+        next_row, next_col = row + dr, col + dc  # Calculate a neighboring cell.
         if (0 <= next_row < len(maze) and
                 0 <= next_col < len(maze[next_row]) and
                 maze[next_row][next_col] == 0):
-            yield (next_row, next_col)
+            yield (next_row, next_col)  # Return an open cell inside the maze.
 
 
-# PSEUDOCODE: write your A* steps here.
-#
-#
-#
-#
-#
-
-# PRACTICE: return the Manhattan distance between two positions.
 def heuristic(position, goal):
-    return abs(position[0] - goal[0]) + abs(position[1] - goal[1])
+    return abs(position[0] - goal[0]) + abs(position[1] - goal[1])  # Estimate steps left.
 
 
-# PRACTICE: use heapq for the frontier, with f = g + h.
-# Each move costs 1. Return (path, expanded): path is a list of positions
-# from start to goal, or [] if there is no path. expanded counts positions
-# removed from the heap and explored; don't count stale entries.
 def a_star(maze, start, goal):
-    frontier = [(heuristic(start, goal), 0, start)]
-    cost = {start: 0}
-    parent = {start: None}
-    expanded = 0
+    frontier = [(heuristic(start, goal), 0, start)]  # Heap entries are (f, g, cell).
+    cost = {start: 0}  # Store the cheapest known cost to every visited cell.
+    parent = {start: None}  # Store the previous cell for rebuilding the path.
+    expanded = 0  # Count cells actually explored.
 
-    while frontier:
-        _, distance, current = heapq.heappop(frontier)
-        if distance != cost[current]:
+    while frontier:  # Continue while cells remain in the priority queue.
+        _, distance, current = heapq.heappop(frontier)  # Choose the lowest estimated cost.
+        if distance != cost[current]:  # Ignore an older, more expensive heap entry.
             continue
-        expanded += 1
-        if current == goal:
-            path = []
-            while current is not None:
-                path.append(current)
-                current = parent[current]
-            return path[::-1], expanded
+        expanded += 1  # Record this explored cell.
+        if current == goal:  # Stop when the goal is reached.
+            path = []  # Start a reverse path at the goal.
+            while current is not None:  # Follow parent links back to the start.
+                path.append(current)  # Add the current cell.
+                current = parent[current]  # Move to its parent.
+            return path[::-1], expanded  # Reverse the path before returning it.
 
-        for position in neighbors(maze, current):
-            new_cost = distance + 1
-            if position not in cost or new_cost < cost[position]:
-                cost[position] = new_cost
-                parent[position] = current
-                heapq.heappush(frontier, (new_cost + heuristic(position, goal), new_cost, position))
-    return [], expanded
+        for position in neighbors(maze, current):  # Check each possible next cell.
+            new_cost = distance + 1  # Every grid move costs one step.
+            if position not in cost or new_cost < cost[position]:  # Keep only a better route.
+                cost[position] = new_cost  # Save the improved cost.
+                parent[position] = current  # Save how the cell was reached.
+                priority = new_cost + heuristic(position, goal)  # Calculate f = g + h.
+                heapq.heappush(frontier, (priority, new_cost, position))  # Queue the cell.
+    return [], expanded  # No route exists when the heap becomes empty.
 
 
 def show_maze(maze, path, start, goal):
@@ -96,11 +83,7 @@ def main():
     print("Maze: S = start, G = goal, # = wall, * = path")
     show_maze(MAZE, [], START, GOAL)
 
-    try:
-        path, expanded = a_star(MAZE, START, GOAL)
-    except NotImplementedError as error:
-        print(error)
-        return
+    path, expanded = a_star(MAZE, START, GOAL)  # Find the route with A*.
 
     if path:
         print("\nPath:", path)
@@ -111,7 +94,5 @@ def main():
     print("Positions explored:", expanded)
 
 
-if __name__ == "__main__" and PRACTICE_MODE:
+if __name__ == "__main__":  # Run main only when this file is run directly.
     main()
-
-# FULL PROGRAM: set PRACTICE_MODE = False and write your whole program below.
