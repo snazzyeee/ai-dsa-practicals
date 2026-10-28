@@ -6,74 +6,58 @@
 // finding the minimum value, mirroring the tree by swapping left and right pointers at every
 // node, and searching for a value.
 
-#if 1 // change 1 to 0 to use your full-program area below.
-
 #include <stdio.h>
 #include <stdlib.h>
 
 typedef struct Node Node;
 
 struct Node {
-    int data;
-    Node *left, *right;
+    int data; // Store the value in this tree node.
+    Node *left, *right; // Point to smaller and larger child nodes.
 };
 
-// PSEUDOCODE: write your steps here.
-/*
-
-
-
-
-
-*/
-
-// PRACTICE: insert a value and return the root.
 Node *insert(Node *root, int value){
     if(root == NULL){
-        Node *node = malloc(sizeof *node);
+        Node *node = malloc(sizeof *node); // Allocate one new tree node.
         if(node == NULL){
             printf("Memory allocation failed.\n");
             return NULL;
         }
-        node->data = value;
-        node->left = node->right = NULL;
+        node->data = value; // Save the inserted value.
+        node->left = node->right = NULL; // New nodes start without children.
         return node;
     }
-    if(value < root->data) root->left = insert(root->left, value);
-    else if(value > root->data) root->right = insert(root->right, value);
+    if(value < root->data) root->left = insert(root->left, value); // Insert smaller values left.
+    else if(value > root->data) root->right = insert(root->right, value); // Insert larger values right.
     else printf("Value already exists.\n");
     return root;
 }
 
-// PRACTICE: return the number of nodes on the longest root-to-leaf path.
 int height(Node *root){
-    if(root == NULL) return 0;
-    int left = height(root->left), right = height(root->right);
-    return 1 + (left > right ? left : right);
+    if(root == NULL) return 0; // An empty branch has height zero.
+    int left = height(root->left), right = height(root->right); // Find both branch heights.
+    return 1 + (left > right ? left : right); // Count this node plus the taller branch.
 }
 
-// PRACTICE: put the minimum in *value and return 1; return 0 for an empty tree.
 int minimum(Node *root, int *value){
     if(root == NULL){
         printf("Tree is empty.\n");
         return 0;
     }
-    while(root->left) root = root->left;
-    *value = root->data;
+    while(root->left) root = root->left; // The leftmost BST node is the minimum.
+    *value = root->data; // Give the minimum back through the pointer.
     return 1;
 }
 
-// PRACTICE: swap the left and right links at every node.
 void mirror(Node *root){
     if(root == NULL) return;
-    Node *temp = root->left;
-    root->left = root->right;
-    root->right = temp;
-    mirror(root->left);
-    mirror(root->right);
+    Node *temp = root->left; // Save the old left child.
+    root->left = root->right; // Move right child to left.
+    root->right = temp; // Move saved left child to right.
+    mirror(root->left); // Mirror the new left subtree.
+    mirror(root->right); // Mirror the new right subtree.
 }
 
-// PRACTICE: return 1 if the value exists, otherwise 0.
 int search(Node *root, int value){
     if(root == NULL) return 0;
     if(root->data == value) return 1;
@@ -81,7 +65,6 @@ int search(Node *root, int value){
     return search(root->right, value);
 }
 
-// PRACTICE: free all the nodes.
 void freeTree(Node *root){
     if(root == NULL) return;
     freeTree(root->left);
@@ -125,8 +108,3 @@ int main(void){
     return ok ? 0 : 1;
 }
 
-#else
-
-// FULL PROGRAM: write your complete program here when practising from scratch.
-
-#endif
