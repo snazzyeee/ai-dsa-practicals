@@ -5,65 +5,50 @@
 // fuel) as edge weights using an adjacency list or adjacency matrix. Accept city names and flight
 // costs, display the graph, and check whether a path exists between every pair of cities.
 
-#if 1 // change 1 to 0 to use your full-program area below.
-
 #include <stdio.h>
 
 #define MAX 10
 
-// PSEUDOCODE: write your steps here.
-/*
-
-
-
-
-
-*/
-
-// PRACTICE: represent each direct flight and its cost in the matrix.
-// This practice menu uses two-way flights and positive costs.
 void addFlight(int graph[MAX][MAX], int from, int to, int cost){
-    graph[from][to] = cost;
-    graph[to][from] = cost;
+    graph[from][to] = cost; // Save the flight cost from the first city to the second.
+    graph[to][from] = cost; // Save the return flight because this graph is two-way.
     printf("Flight added.\n");
 }
 
-// PRACTICE: print the cities and their connected cities with costs.
 void displayGraph(int n, char cities[MAX][31], int graph[MAX][MAX]){
-    for(int i = 0; i < n; i++){
+    for(int i = 0; i < n; i++){ // Print details for every city.
         printf("%s:", cities[i]);
-        for(int j = 0; j < n; j++){
-            if(graph[i][j] != 0) printf(" %s(%d)", cities[j], graph[i][j]);
+        for(int j = 0; j < n; j++){ // Check all possible destinations.
+            if(graph[i][j] != 0) printf(" %s(%d)", cities[j], graph[i][j]); // Print existing flights.
         }
         printf("\n");
     }
 }
 
 void dfs(int n, int graph[MAX][MAX], int city, int visited[]){
-    visited[city] = 1;
-    for(int next = 0; next < n; next++){
-        if(graph[city][next] != 0 && !visited[next]) dfs(n, graph, next, visited);
+    visited[city] = 1; // Mark this city as reachable.
+    for(int next = 0; next < n; next++){ // Check every possible next city.
+        if(graph[city][next] != 0 && !visited[next]) dfs(n, graph, next, visited); // Follow unvisited flights.
     }
 }
 
-// PRACTICE: use DFS or BFS; return 1 if every city is reachable, otherwise 0.
 int isConnected(int n, int graph[MAX][MAX]){
-    int visited[MAX] = {0};
-    dfs(n, graph, 0, visited);
-    for(int i = 0; i < n; i++){
-        if(!visited[i]) return 0;
+    int visited[MAX] = {0}; // Start with no city marked reachable.
+    dfs(n, graph, 0, visited); // Visit every city reachable from city zero.
+    for(int i = 0; i < n; i++){ // Check whether DFS reached every city.
+        if(!visited[i]) return 0; // A missed city means the graph is disconnected.
     }
     return 1;
 }
 
 int main(void){
-    int graph[MAX][MAX] = {{0}};
-    char cities[MAX][31];
-    int n, opt, from, to, cost, connected;
+    int graph[MAX][MAX] = {{0}}; // Start with no flights in the adjacency matrix.
+    char cities[MAX][31]; // Store one name for each city.
+    int n, opt, from, to, cost, connected; // Store input and menu values.
 
     printf("Number of cities (1-%d): ", MAX);
     if(scanf("%d", &n) != 1 || n < 1 || n > MAX) return 1;
-    for(int i = 0; i < n; i++){
+    for(int i = 0; i < n; i++){ // Read every city name.
         printf("City %d name (one word): ", i + 1);
         if(scanf("%30s", cities[i]) != 1) return 1;
     }
@@ -77,7 +62,7 @@ int main(void){
             if(from < 1 || from > n || to < 1 || to > n || cost <= 0){
                 printf("Invalid city number or cost.\n");
             }else{
-                addFlight(graph, from - 1, to - 1, cost);
+                addFlight(graph, from - 1, to - 1, cost); // Convert user numbers to array indices.
             }
         }else if(opt == 2){
             displayGraph(n, cities, graph);
@@ -91,8 +76,3 @@ int main(void){
     return 0;
 }
 
-#else
-
-// FULL PROGRAM: write your complete program here when practising from scratch.
-
-#endif
