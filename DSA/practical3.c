@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define MAX 7
+#define MAX 7 // Fix the hash table size.
 
 // client IDs are the keys; the other arrays hold the matching details.
 int H[MAX];
@@ -16,11 +16,11 @@ char names[MAX][31];
 char phones[MAX][11];
 
 int h1(int key){
-    return key % MAX;
+    return key % MAX; // Map a key to its first table index.
 }
 
 int h2(int key){
-    return 1 + key % (MAX - 1);
+    return 1 + key % (MAX - 1); // Create a non-zero second hash step.
 }
 
 int sqr(int x){
@@ -28,28 +28,28 @@ int sqr(int x){
 }
 
 int linearProb(int key, int i){
-    return (h1(key) + i) % MAX;
+    return (h1(key) + i) % MAX; // Move one slot for every collision.
 }
 
 int quadProb(int key, int i){
-    return (h1(key) + sqr(i)) % MAX;
+    return (h1(key) + sqr(i)) % MAX; // Move by squared attempt numbers.
 }
 
 int doubleHash(int key, int i){
-    return (h1(key) + i * h2(key)) % MAX;
+    return (h1(key) + i * h2(key)) % MAX; // Move by a second hash step.
 }
 
 int probe(int key, int i, int method){
-    if(method == 1) return linearProb(key, i);
-    if(method == 2) return quadProb(key, i);
+    if(method == 1) return linearProb(key, i); // Use linear probing when selected.
+    if(method == 2) return quadProb(key, i); // Use quadratic probing when selected.
     return doubleHash(key, i); // main only allows methods 1, 2 and 3.
 }
 
 // returns 0 if input fails; otherwise the menu can continue.
 int insertClient(int method){
     // gets client data from the user, iterates over collisions if any and calls probe(,,method)
-    int key;
-    char name[100], phone[100];
+    int key; // Store the client's ID.
+    char name[100], phone[100]; // Read input before copying it into table-sized arrays.
 
     printf("Enter client ID (non-negative): ");
     if(scanf("%d", &key) != 1 || key < 0){
@@ -71,15 +71,15 @@ int insertClient(int method){
     }
 
     // i is the attempt number, try another slot when there is a collision.
-    for(int i = 0; i < MAX; i++){
-        int idx = probe(key, i, method);
+    for(int i = 0; i < MAX; i++){ // Try every possible probe position.
+        int idx = probe(key, i, method); // Calculate this attempt's table index.
 
         // an existing ID is updated instead of adding a duplicate.
         if(occupied[idx] == 0 || H[idx] == key){
-            H[idx] = key;
-            strcpy(names[idx], name);
-            strcpy(phones[idx], phone);
-            occupied[idx] = 1;
+            H[idx] = key; // Store the client's ID.
+            strcpy(names[idx], name); // Store the matching name.
+            strcpy(phones[idx], phone); // Store the matching phone number.
+            occupied[idx] = 1; // Mark this table slot as used.
             printf("Client stored at index %d.\n", idx);
             return 1;
         }// if occupied == 1 then i increments anyways
@@ -92,8 +92,8 @@ int insertClient(int method){
 
 int searchClient(int key, int method){
     // search follows the same sequence used while inserting the key.
-    for(int i = 0; i < MAX; i++){
-        int idx = probe(key, i, method);
+    for(int i = 0; i < MAX; i++){ // Follow the same sequence used by insertion.
+        int idx = probe(key, i, method); // Get the next table index.
         if(occupied[idx] == 0) return -1;
         if(H[idx] == key) return idx;
     }
@@ -101,7 +101,7 @@ int searchClient(int key, int method){
 }
 
 void display(){
-    for(int i = 0; i < MAX; i++){
+    for(int i = 0; i < MAX; i++){ // Print all table positions.
         if(occupied[i] == 1){
             printf("%d: ID %d | %s | %s\n", i, H[i], names[i], phones[i]);
         }else{
@@ -111,7 +111,7 @@ void display(){
 }
 
 int main(void){
-    int method, opt, key;
+    int method, opt, key; // Store the probing method, menu choice and ID.
 
     printf("Choose a collision handling method:\n");
     printf("1: Linear Probing\n2: Quadratic Probing\n3: Double Hashing\n");
