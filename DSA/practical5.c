@@ -6,8 +6,6 @@
 // some initial bookings. Support displaying available seats, booking seats, and cancelling
 // bookings.
 
-#if 1 // change 1 to 0 to use your full-program area below.
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -21,68 +19,54 @@ struct Seat {
     Seat *prev, *next;
 };
 
-// PSEUDOCODE: write your steps here.
-/*
-
-
-
-
-
-*/
-
-// PRACTICE: allocate and link seven seats in each row, with some initially booked.
 int createRows(Seat *rows[ROWS]){
-    for(int row = 0; row < ROWS; row++){
-        Seat *last = NULL;
-        for(int seat = 1; seat <= SEATS; seat++){
-            Seat *node = malloc(sizeof *node);
-            if(node == NULL) return 0;
-            node->number = seat;
-            node->booked = (row == 0 && seat == 1) || (row == 2 && seat == 4);
-            node->prev = last;
-            node->next = NULL;
-            if(last) last->next = node;
-            else rows[row] = node;
-            last = node;
+    for(int row = 0; row < ROWS; row++){ // Create one linked list for every theatre row.
+        Seat *last = NULL; // Track the previous seat while building a row.
+        for(int seat = 1; seat <= SEATS; seat++){ // Create the seven seats in this row.
+            Seat *node = malloc(sizeof *node); // Allocate memory for one seat.
+            if(node == NULL) return 0; // Report failure when memory is unavailable.
+            node->number = seat; // Store this seat number.
+            node->booked = (row == 0 && seat == 1) || (row == 2 && seat == 4); // Add initial bookings.
+            node->prev = last; // Link backwards to the previous seat.
+            node->next = NULL; // The new seat has no next seat yet.
+            if(last) last->next = node; // Link the previous seat forward.
+            else rows[row] = node; // Save the first seat as the row head.
+            last = node; // Make this seat the previous seat for the next loop.
         }
     }
     return 1;
 }
 
-// PRACTICE: show the free seats in every row.
 void displayAvailable(Seat *rows[ROWS]){
-    for(int row = 0; row < ROWS; row++){
+    for(int row = 0; row < ROWS; row++){ // Visit each theatre row.
         printf("Row %d:", row + 1);
-        for(Seat *seat = rows[row]; seat; seat = seat->next){
-            if(!seat->booked) printf(" %d", seat->number);
+        for(Seat *seat = rows[row]; seat; seat = seat->next){ // Move through the row's list.
+            if(!seat->booked) printf(" %d", seat->number); // Print only free seats.
         }
         printf("\n");
     }
 }
 
-// PRACTICE: find a seat and book it only if it is free.
 void bookSeat(Seat *row, int seat){
-    while(row && row->number != seat) row = row->next;
+    while(row && row->number != seat) row = row->next; // Find the requested seat node.
     if(row == NULL) printf("Seat not found.\n");
     else if(row->booked) printf("Seat already booked.\n");
     else{
-        row->booked = 1;
+        row->booked = 1; // Mark the available seat as booked.
         printf("Seat booked.\n");
     }
 }
 
-// PRACTICE: find a seat and cancel only an existing booking.
 void cancelSeat(Seat *row, int seat){
-    while(row && row->number != seat) row = row->next;
+    while(row && row->number != seat) row = row->next; // Find the requested seat node.
     if(row == NULL) printf("Seat not found.\n");
     else if(!row->booked) printf("Seat is not booked.\n");
     else{
-        row->booked = 0;
+        row->booked = 0; // Mark the booked seat as free.
         printf("Booking cancelled.\n");
     }
 }
 
-// PRACTICE: free every seat in every row.
 void freeRows(Seat *rows[ROWS]){
     for(int row = 0; row < ROWS; row++){
         Seat *seat = rows[row];
@@ -128,8 +112,3 @@ int main(void){
     return ok ? 0 : 1;
 }
 
-#else
-
-// FULL PROGRAM: write your complete program here when practising from scratch.
-
-#endif
