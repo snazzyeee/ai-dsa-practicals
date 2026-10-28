@@ -11,19 +11,19 @@
 #include <string.h>
 
 struct node{
-    int prn;
-    char name[31];
-    struct node *next;
+    int prn; // Store the member's PRN.
+    char name[31]; // Store a one-word member name.
+    struct node *next; // Point to the next member.
 };
 
 struct node *addMember(struct node *head, int prn, const char name[], int role){
-    struct node *current = head;
-    while(current){
+    struct node *current = head; // Start checking at the first member.
+    while(current){ // Check every existing member for a duplicate PRN.
         if(current->prn == prn){
             printf("PRN already exists.\n");
             return head;
         }
-        current = current->next;
+        current = current->next; // Move to the next member.
     }
 
     if((role == 1 && head != NULL) ||
@@ -33,69 +33,69 @@ struct node *addMember(struct node *head, int prn, const char name[], int role){
         return head;
     }
 
-    struct node *newNode = malloc(sizeof *newNode);
+    struct node *newNode = malloc(sizeof *newNode); // Allocate memory for the new member.
     if(newNode == NULL){
         printf("Memory allocation failed.\n");
         return head;
     }
-    newNode->prn = prn;
-    strcpy(newNode->name, name);
-    newNode->next = NULL;
+    newNode->prn = prn; // Save the PRN in the new node.
+    strcpy(newNode->name, name); // Copy the member name into the node.
+    newNode->next = NULL; // New nodes initially have no following node.
 
-    if(head == NULL) return newNode;
+    if(head == NULL) return newNode; // The first node becomes the president.
     if(role == 3){
-        head->next = newNode;
+        head->next = newNode; // Add the secretary after the president.
     }else{
         current = head;
-        while(current->next->next != NULL) current = current->next;
-        newNode->next = current->next;
-        current->next = newNode;
+        while(current->next->next != NULL) current = current->next; // Stop before secretary.
+        newNode->next = current->next; // Connect the new member to secretary.
+        current->next = newNode; // Connect the previous member to the new member.
     }
     return head;
 }
 
 struct node *deleteMember(struct node *head, int prn){
-    struct node *current = head, *previous = NULL;
+    struct node *current = head, *previous = NULL; // Track current and previous nodes.
     while(current && current->prn != prn){
-        previous = current;
-        current = current->next;
+        previous = current; // Remember the current node before moving.
+        current = current->next; // Move forward through the list.
     }
     if(current == NULL){
         printf("Member not found.\n");
         return head;
     }
-    if(previous) previous->next = current->next;
-    else head = current->next;
-    free(current);
+    if(previous) previous->next = current->next; // Skip a middle or last node.
+    else head = current->next; // Move head when deleting the president.
+    free(current); // Release the deleted node's memory.
     printf("Member deleted.\n");
     return head;
 }
 
 void displayMembers(struct node *head){
-    int count = 0;
+    int count = 0; // Count members while displaying them.
     for(struct node *current = head; current; current = current->next){
         printf("%d: %s", current->prn, current->name);
         if(current == head) printf(" (president)");
         else if(current->next == NULL) printf(" (secretary)");
         printf("\n");
-        count++;
+        count++; // Include this member in the total.
     }
     printf("Total members: %d\n", count);
 }
 
 struct node *concatenate(struct node *first, struct node *second){
-    if(first == NULL) return second;
+    if(first == NULL) return second; // A blank first list becomes the second list.
     struct node *current = first;
-    while(current->next) current = current->next;
-    current->next = second;
+    while(current->next) current = current->next; // Find first list's last node.
+    current->next = second; // Attach the second division.
     return first;
 }
 
 void freeList(struct node *head){
-    while(head){
-        struct node *next = head->next;
-        free(head);
-        head = next;
+    while(head){ // Continue until every node is freed.
+        struct node *next = head->next; // Save next before freeing current node.
+        free(head); // Release current node memory.
+        head = next; // Move to the saved next node.
     }
 }
 
