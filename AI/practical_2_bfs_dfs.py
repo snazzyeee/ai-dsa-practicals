@@ -7,8 +7,6 @@
 
 from collections import deque
 
-PRACTICE_MODE = True  # change to False to use the full-program area at the bottom
-
 # 0 is a path, 1 is a wall; positions are (row, column).
 MAZE = [
     [0, 0, 0, 0, 0],
@@ -21,72 +19,57 @@ START = (0, 0)
 GOAL = (4, 4)
 
 
-# The driver supplies valid up, down, left and right neighbors.
 def neighbors(maze, position):
-    row, col = position
-    for dr, dc in ((-1, 0), (1, 0), (0, -1), (0, 1)):
-        next_row, next_col = row + dr, col + dc
+    row, col = position  # Split the current position into row and column.
+    for dr, dc in ((-1, 0), (1, 0), (0, -1), (0, 1)):  # Try four directions.
+        next_row, next_col = row + dr, col + dc  # Calculate the next position.
         if (0 <= next_row < len(maze) and
                 0 <= next_col < len(maze[next_row]) and
-                maze[next_row][next_col] == 0):
-            yield (next_row, next_col)
+                maze[next_row][next_col] == 0):  # Keep only valid, open cells.
+            yield (next_row, next_col)  # Return one valid neighbor.
 
 
-# PSEUDOCODE: write your BFS and DFS steps here.
-#
-#
-#
-#
-#
-
-# PRACTICE: use a queue (deque) to explore the maze with BFS.
-# Return (path, expanded): path is a list of (row, col) positions from
-# start to goal, or [] if there is no path. expanded counts positions removed
-# from the queue for exploration.
 def bfs(maze, start, goal):
-    queue = deque([start])
-    parent = {start: None}
-    expanded = 0
+    queue = deque([start])  # Put the start cell into the BFS queue.
+    parent = {start: None}  # Store the previous cell for path reconstruction.
+    expanded = 0  # Count cells removed from the queue.
 
-    while queue:
-        current = queue.popleft()
-        expanded += 1
-        if current == goal:
-            return build_path(parent, goal), expanded
-        for position in neighbors(maze, current):
-            if position not in parent:
-                parent[position] = current
-                queue.append(position)
-    return [], expanded
+    while queue:  # Continue until there are no cells left to visit.
+        current = queue.popleft()  # BFS removes the oldest cell first.
+        expanded += 1  # Record this explored cell.
+        if current == goal:  # Stop immediately when the goal is reached.
+            return build_path(parent, goal), expanded  # Return the shortest path.
+        for position in neighbors(maze, current):  # Check every reachable neighbor.
+            if position not in parent:  # A parent entry also means "already visited".
+                parent[position] = current  # Remember how this cell was reached.
+                queue.append(position)  # Add it at the back of the queue.
+    return [], expanded  # Return an empty path when the goal cannot be reached.
 
 
-# PRACTICE: use a stack or recursion to explore the maze with DFS.
-# Return (path, expanded) using the same rules as BFS. For recursion, count
-# positions when first explored.
 def dfs(maze, start, goal):
-    stack = [start]
-    parent = {start: None}
-    expanded = 0
+    stack = [start]  # Put the start cell into the DFS stack.
+    parent = {start: None}  # Store previous cells for the final path.
+    expanded = 0  # Count cells removed from the stack.
 
-    while stack:
-        current = stack.pop()
-        expanded += 1
-        if current == goal:
-            return build_path(parent, goal), expanded
-        for position in neighbors(maze, current):
-            if position not in parent:
-                parent[position] = current
-                stack.append(position)
-    return [], expanded
+    while stack:  # Continue while a path still needs exploring.
+        current = stack.pop()  # DFS removes the newest cell first.
+        expanded += 1  # Record this explored cell.
+        if current == goal:  # Stop when the goal is found.
+            return build_path(parent, goal), expanded  # Rebuild and return the path.
+        for position in neighbors(maze, current):  # Check every reachable neighbor.
+            if position not in parent:  # Do not visit a cell twice.
+                parent[position] = current  # Store the route to this cell.
+                stack.append(position)  # Put it on top of the stack.
+    return [], expanded  # Return an empty path when no route exists.
 
 
 def build_path(parent, goal):
-    path = []
-    current = goal
-    while current is not None:
-        path.append(current)
-        current = parent[current]
-    return path[::-1]
+    path = []  # Start with an empty path.
+    current = goal  # Begin backtracking at the goal.
+    while current is not None:  # Stop after reaching the start's None parent.
+        path.append(current)  # Add the current cell to the reverse path.
+        current = parent[current]  # Move to its previous cell.
+    return path[::-1]  # Reverse the path so it starts at the start cell.
 
 
 def show_maze(maze, path, start, goal):
@@ -141,7 +124,5 @@ def main():
             print("Invalid choice.")
 
 
-if __name__ == "__main__" and PRACTICE_MODE:
+if __name__ == "__main__":  # Run the menu only when this file is run directly.
     main()
-
-# FULL PROGRAM: set PRACTICE_MODE = False and write your whole program below.
