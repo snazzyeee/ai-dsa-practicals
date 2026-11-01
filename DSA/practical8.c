@@ -74,21 +74,20 @@ void freeTree(Node *root){
 
 int main(void){
     Node *root = NULL;
-    int opt, value, result, mirrored = 0, ok = 1;
+    int opt, value, mirrored = 0;
 
     do{
         printf("\n1: Insert  2: Longest path  3: Minimum  4: Mirror\n");
         printf("5: Search  6: Exit\n");
-        if(scanf("%d", &opt) != 1){ ok = 0; break; }
+        if(scanf("%d", &opt) != 1) break;
         if(mirrored && (opt == 1 || opt == 3 || opt == 5)){
             printf("Mirror the tree back before using BST insert, minimum or search.\n");
         }else if(opt == 1){
             printf("Value to insert: ");
-            if(scanf("%d", &value) != 1){ ok = 0; break; }
+            if(scanf("%d", &value) != 1) break;
             root = insert(root, value);
         }else if(opt == 2){
-            result = height(root);
-            if(result >= 0) printf("Nodes on longest path: %d\n", result);
+            printf("Nodes on longest path: %d\n", height(root));
         }else if(opt == 3){
             if(minimum(root, &value)) printf("Minimum: %d\n", value);
         }else if(opt == 4){
@@ -97,14 +96,14 @@ int main(void){
             printf("Tree mirrored.\n");
         }else if(opt == 5){
             printf("Value to search: ");
-            if(scanf("%d", &value) != 1){ ok = 0; break; }
-            result = search(root, value);
-            if(result >= 0) printf(result ? "Found.\n" : "Not found.\n");
+            if(scanf("%d", &value) != 1) break;
+            if(search(root, value)) printf("Found.\n");
+            else printf("Not found.\n");
         }else if(opt != 6){
             printf("Invalid option.\n");
         }
     }while(opt != 6);
     freeTree(root);
-    return ok ? 0 : 1;
+    return 0;
 }
 
