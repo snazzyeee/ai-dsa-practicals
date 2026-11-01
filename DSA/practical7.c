@@ -14,12 +14,6 @@ typedef struct {
     int front, rear, count; // Track oldest position, next free position and size.
 } Queue;
 
-void initialize(Queue *q){
-    q->front = 0; // The oldest order starts at index zero.
-    q->rear = 0; // The first new order goes at index zero.
-    q->count = 0; // The queue initially has no orders.
-}
-
 void enqueue(Queue *q, int order, int capacity){
     if(q->count == capacity){
         printf("Queue is full.\n");
@@ -54,12 +48,11 @@ void displayQueue(const Queue *q, int capacity){
 }
 
 int main(void){
-    Queue q = {0};
+    Queue q = {0}; // Start with front, rear and count all at zero.
     int capacity, opt, order;
 
     printf("Maximum pending orders (1-%d): ", MAX);
     if(scanf("%d", &capacity) != 1 || capacity < 1 || capacity > MAX) return 1;
-    initialize(&q);
 
     do{
         printf("\n1: Add order  2: Serve order  3: Display queue  4: Exit\n");
