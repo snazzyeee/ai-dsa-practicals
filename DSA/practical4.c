@@ -101,9 +101,12 @@ int main(void){
         printf("\n1: Add member  2: Delete member  3: Display and count\n");
         printf("4: Join divisions  5: Exit\n");
         if(scanf("%d", &opt) != 1) break;
-        if(opt >= 1 && opt <= 3){
+        switch(opt){
+        case 1:
+        case 2:
+        case 3: // These operations first need a division.
             printf("Division (1 or 2): ");
-            if(scanf("%d", &division) != 1) break;
+            if(scanf("%d", &division) != 1){ opt = 5; break; }
             if(division < 1 || division > 2){
                 printf("Invalid division.\n");
                 continue;
@@ -111,21 +114,25 @@ int main(void){
             division--;
             if(opt == 1){
                 printf("Role (1: president, 2: member, 3: secretary): ");
-                if(scanf("%d", &role) != 1) break;
+                if(scanf("%d", &role) != 1){ opt = 5; break; }
                 if(role < 1 || role > 3){ printf("Invalid role.\n"); continue; }
                 printf("PRN and name (one word): ");
-                if(scanf("%d %30s", &prn, name) != 2) break;
+                if(scanf("%d %30s", &prn, name) != 2){ opt = 5; break; }
                 lists[division] = addMember(lists[division], prn, name, role);
             }else if(opt == 2){
                 printf("PRN to delete: ");
-                if(scanf("%d", &prn) != 1) break;
+                if(scanf("%d", &prn) != 1){ opt = 5; break; }
                 lists[division] = deleteMember(lists[division], prn);
             }else displayMembers(lists[division]);
-        }else if(opt == 4){
+            break;
+        case 4:
             lists[0] = concatenate(lists[0], lists[1]);
             lists[1] = NULL;
             printf("Divisions joined; first and last nodes are president and secretary.\n");
-        }else if(opt != 5) printf("Invalid option.\n");
+            break;
+        case 5: break;
+        default: printf("Invalid option.\n");
+        }
     }while(opt != 5);
 
     freeList(lists[0]);

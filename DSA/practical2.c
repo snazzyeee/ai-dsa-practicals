@@ -47,7 +47,9 @@ int main(void){
     do{ // Keep showing the menu until the user exits.
         printf("\n1: Selection Sort  2: Bubble Sort  3: Exit\n");
         if(scanf("%d", &opt) != 1) return 1;// check for integer input
-        if(opt == 1 || opt == 2){
+        switch(opt){
+        case 1:
+        case 2: // Start both sorts with the original percentages.
             for(int i = 0; i < n; i++) sorted[i] = original[i]; // Restore unsorted input.
             if(opt == 1) selectionSort(n, sorted); // Run selection sort.
             else bubbleSort(n, sorted); // Run bubble sort.
@@ -56,8 +58,9 @@ int main(void){
             printf("\nTop scores: ");
             for(int i = n - 1; i >= 0 && i >= n - 5; i--) printf("%.2f ", sorted[i]); // Read the top five from the end.
             printf("\n");
-        }else if(opt != 3){
-            printf("Invalid option.\n");
+            break;
+        case 3: break;
+        default: printf("Invalid option.\n");
         }
     }while(opt != 3);
     return 0;

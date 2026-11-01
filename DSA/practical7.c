@@ -57,16 +57,20 @@ int main(void){
     do{
         printf("\n1: Add order  2: Serve order  3: Display queue  4: Exit\n");
         if(scanf("%d", &opt) != 1) return 1;
-        if(opt == 1){
+        switch(opt){
+        case 1:
             printf("Order number: ");
             if(scanf("%d", &order) != 1) return 1;
             enqueue(&q, order, capacity);
-        }else if(opt == 2){
+            break;
+        case 2:
             dequeue(&q, capacity);
-        }else if(opt == 3){
+            break;
+        case 3:
             displayQueue(&q, capacity);
-        }else if(opt != 4){
-            printf("Invalid option.\n");
+            break;
+        case 4: break;
+        default: printf("Invalid option.\n");
         }
     }while(opt != 4);
     return 0;

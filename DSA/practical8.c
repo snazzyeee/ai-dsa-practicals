@@ -82,25 +82,33 @@ int main(void){
         if(scanf("%d", &opt) != 1) break;
         if(mirrored && (opt == 1 || opt == 3 || opt == 5)){
             printf("Mirror the tree back before using BST insert, minimum or search.\n");
-        }else if(opt == 1){
+            continue;
+        }
+        switch(opt){
+        case 1:
             printf("Value to insert: ");
-            if(scanf("%d", &value) != 1) break;
+            if(scanf("%d", &value) != 1){ opt = 6; break; }
             root = insert(root, value);
-        }else if(opt == 2){
+            break;
+        case 2:
             printf("Nodes on longest path: %d\n", height(root));
-        }else if(opt == 3){
+            break;
+        case 3:
             if(minimum(root, &value)) printf("Minimum: %d\n", value);
-        }else if(opt == 4){
+            break;
+        case 4:
             mirror(root);
             mirrored = !mirrored; // a mirrored tree is not normally ordered as a BST.
             printf("Tree mirrored.\n");
-        }else if(opt == 5){
+            break;
+        case 5:
             printf("Value to search: ");
-            if(scanf("%d", &value) != 1) break;
+            if(scanf("%d", &value) != 1){ opt = 6; break; }
             if(search(root, value)) printf("Found.\n");
             else printf("Not found.\n");
-        }else if(opt != 6){
-            printf("Invalid option.\n");
+            break;
+        case 6: break;
+        default: printf("Invalid option.\n");
         }
     }while(opt != 6);
     freeTree(root);

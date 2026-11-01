@@ -81,11 +81,14 @@ int main(void){
     do{
         printf("\n1: Available seats  2: Book  3: Cancel  4: Exit\n");
         if(scanf("%d", &opt) != 1){ ok = 0; break; }
-        if(opt == 1){
+        switch(opt){
+        case 1:
             displayAvailable(rows);
-        }else if(opt == 2 || opt == 3){
+            break;
+        case 2:
+        case 3: // Booking and cancelling both need a row and seat.
             printf("Row (1-10) and seat (1-7): ");
-            if(scanf("%d %d", &row, &seat) != 2){ ok = 0; break; }
+            if(scanf("%d %d", &row, &seat) != 2){ ok = 0; opt = 4; break; }
             if(row < 1 || row > ROWS || seat < 1 || seat > SEATS){
                 printf("Invalid row or seat.\n");
             }else if(opt == 2){
@@ -93,8 +96,9 @@ int main(void){
             }else{
                 changeBooking(rows[row - 1], seat, 0);
             }
-        }else if(opt != 4){
-            printf("Invalid option.\n");
+            break;
+        case 4: break;
+        default: printf("Invalid option.\n");
         }
     }while(opt != 4);
 

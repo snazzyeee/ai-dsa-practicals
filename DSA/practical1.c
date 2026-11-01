@@ -49,8 +49,9 @@ int main(void){
     do{
         printf("\n1: Linear search  2: Binary search  3: Exit\n");
         if(scanf("%d", &choice) != 1) return 1;
-        if(choice != 1 && choice != 2) continue;
-
+        switch(choice){
+        case 1:
+        case 2: // Both searches need roll numbers and a target.
         if(choice == 1) printf("Enter each student's roll-no (unsorted):\n");
         else printf("Enter each student's roll-no in ascending order:\n");
         for(int i = 0; i < n; i++){
@@ -67,6 +68,10 @@ int main(void){
         else index = binaryS(target, n, stud);
         if(index == -1) printf("Roll number not found.\n");
         else printf("Found at index %d\n", index);
+        break;
+        case 3: break; // The loop ends after this case.
+        default: printf("Invalid option.\n");
+        }
     }while(choice != 3);
     return 0;
 }

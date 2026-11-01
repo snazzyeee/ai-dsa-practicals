@@ -88,15 +88,25 @@ int evaluatePostfix(const char postfix[], double *result){
 int main(void){
     char infix[MAX], postfix[MAX];
     double result;
+    int choice;
 
-    printf("Enter infix expression without spaces: ");
-    if(scanf("%127s", infix) != 1) return 1;
-    if(infixToPostfix(infix, postfix)){
-        printf("Postfix: %s\n", postfix);
-        if(evaluatePostfix(postfix, &result)){
-            printf("Result: %g\n", result);
-        }else printf("Unable to evaluate expression.\n");
-    }else printf("Invalid infix expression.\n");
+    do{
+        printf("\n1: Convert and evaluate  2: Exit\n");
+        if(scanf("%d", &choice) != 1) return 1;
+        switch(choice){
+        case 1:
+            printf("Enter infix expression without spaces: ");
+            if(scanf("%127s", infix) != 1) return 1;
+            if(infixToPostfix(infix, postfix)){
+                printf("Postfix: %s\n", postfix);
+                if(evaluatePostfix(postfix, &result)) printf("Result: %g\n", result);
+                else printf("Unable to evaluate expression.\n");
+            }else printf("Invalid infix expression.\n");
+            break;
+        case 2: break;
+        default: printf("Invalid option.\n");
+        }
+    }while(choice != 2);
     return 0;
 }
 

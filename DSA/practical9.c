@@ -56,7 +56,8 @@ int main(void){
     do{
         printf("\n1: Add flight  2: Display graph  3: Check connectivity  4: Exit\n");
         if(scanf("%d", &opt) != 1) return 1;
-        if(opt == 1){
+        switch(opt){
+        case 1:
             printf("From city number, to city number, cost: ");
             if(scanf("%d %d %d", &from, &to, &cost) != 3) return 1;
             if(from < 1 || from > n || to < 1 || to > n || cost <= 0){
@@ -64,13 +65,16 @@ int main(void){
             }else{
                 addFlight(graph, from - 1, to - 1, cost); // Convert user numbers to array indices.
             }
-        }else if(opt == 2){
+            break;
+        case 2:
             displayGraph(n, cities, graph);
-        }else if(opt == 3){
+            break;
+        case 3:
             if(isConnected(n, graph)) printf("Connected.\n");
             else printf("Not connected.\n");
-        }else if(opt != 4){
-            printf("Invalid option.\n");
+            break;
+        case 4: break;
+        default: printf("Invalid option.\n");
         }
     }while(opt != 4);
     return 0;

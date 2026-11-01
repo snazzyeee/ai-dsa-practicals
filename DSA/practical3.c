@@ -18,12 +18,12 @@ int probe(int key, int i, int method) {
     return (h + i * (1 + key % (MAX - 1))) % MAX;       // Double hashing
 }
 
-void insert(int method) {
+void insert(int method){
     int id, index;
     char name[31], phone[11];
     printf("Enter non-negative ID, name and phone: ");
-    if (scanf("%d %30s %10s", &id, name, phone) != 3 || id < 0) return;
-    for (int i = 0; i < MAX; i++) {
+    scanf("%d %30s %10s", &id, name, phone);
+    for (int i = 0; i < MAX; i++){
         index = probe(id, i, method);
         if (!table[index].used || table[index].id == id) {
             table[index].id = id;
@@ -54,19 +54,25 @@ void search(int method) {
     printf("Client not found.\n");
 }
 
-int main(void) {
+int main(void){
     int method, choice;
     printf("Method: 1 Linear, 2 Quadratic, 3 Double hashing: ");
-    if (scanf("%d", &method) != 1 || method < 1 || method > 3) return 1;
+    scanf("%d", &method);
     do {
         printf("\n1 Add/update  2 Search  3 Display  4 Exit: ");
-        if (scanf("%d", &choice) != 1) break;
-        if (choice == 1) insert(method);
-        if (choice == 2) search(method);
-        if (choice == 3)
-            for (int i = 0; i < MAX; i++)
-                if (table[i].used)
+        scanf("%d", &choice);
+        switch (choice){
+        case 1: insert(method); break;
+        case 2: search(method); break;
+        case 3:
+            for(int i = 0; i < MAX; i++){
+                if (table[i].used == 1)
                     printf("%d: %d %s %s\n", i, table[i].id, table[i].name, table[i].phone);
+            }
+            break;
+        case 4: break;
+        default: printf("Invalid option.\n");
+        }
     } while (choice != 4);
     return 0;
 }
