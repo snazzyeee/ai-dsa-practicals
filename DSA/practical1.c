@@ -9,34 +9,6 @@
 
 #include <stdio.h>
 
-int store_roll_no_l(int n, int stud[]){
-    printf("Enter each student's roll-no: \n"); // Ask for unsorted roll numbers.
-    for(int i = 0; i < n; i++){ // Visit every array position.
-        if(scanf("%d", &stud[i]) != 1) return 0; // Stop on invalid input.
-    }
-    return 1;
-
-}
-
-int store_roll_no_b(int n, int stud[]){
-    printf("Enter each student's roll-no in ascending (sorted-array): \n"); // Binary search needs sorted data.
-    for(int i = 0; i < n; i++){ // Read every roll number.
-        if(scanf("%d", &stud[i]) != 1) return 0; // Reject non-integer input.
-        if(i > 0 && stud[i] < stud[i - 1]){ // Check that this number keeps the array sorted.
-            printf("Roll numbers must be in ascending order.\n");
-            return 0;
-        }
-    }
-    return 1;
-
-}
-
-int ask_target(int *tgt){
-    printf("Input target: \n"); // Ask which roll number to find.
-    return scanf("%d", tgt) == 1; // Return 1 only after reading a number.
-
-}
-
 int linearS(int target, int n, int stud[]){
     for(int i = 0; i < n; i++){ // Check elements from the first to the last.
         if(target == stud[i]){ // Compare the target with the current element.
@@ -68,73 +40,33 @@ int binaryS(int target, int n, int stud[]){
     
 }
 
-void displaystud(int n, int stud[]){
-    for(int i = 0; i < n; i++){ // Print every stored roll number.
-        printf("%d, ", stud[i]); // Print one element.
-    }
+int main(void){
+    int n, choice, target, index;
+    int stud[1000]; // Store up to 1000 roll numbers.
+    printf("How many roll numbers (1-1000)? ");
+    if(scanf("%d", &n) != 1 || n < 1 || n > 1000) return 1;
 
-}
-
-void ui(int n, int stud[]){
-    int opt; // Store the selected menu option.
-    int hasData = 0; // Remember whether the array has been filled.
-    int idx; // Store the index found by a search.
-    int target; // Store the roll number to search for.
     do{
-        printf("Which search do you want to use?: \n");
-        printf("1: Linear Search \n");
-        printf("2: Binary Search \n");
-        printf("3: Display Array \n");
-        printf("4: Exit \n");
-        if(scanf("%d", &opt) != 1) return; // End safely on invalid menu input.
+        printf("\n1: Linear search  2: Binary search  3: Exit\n");
+        if(scanf("%d", &choice) != 1) return 1;
+        if(choice != 1 && choice != 2) continue;
 
-        switch(opt){
-            case 1:
-            if(!store_roll_no_l(n, stud)) return; // Read random-order values.
-            hasData = 1; // Mark that the array now contains values.
-            if(!ask_target(&target)) return; // Read the value to find.
-            idx = linearS(target, n, stud); // Search each array element.
-            if(idx != -1){
-            printf("Found at index %d\n", idx);
-            }else{printf("Target not found! :(\n");
+        if(choice == 1) printf("Enter each student's roll-no (unsorted):\n");
+        else printf("Enter each student's roll-no in ascending order:\n");
+        for(int i = 0; i < n; i++){
+            if(scanf("%d", &stud[i]) != 1) return 1;
+            // Binary search only works when the input is sorted.
+            if(choice == 2 && i > 0 && stud[i] < stud[i - 1]){
+                printf("Roll numbers must be in ascending order.\n");
+                return 1;
             }
-            break;
-            case 2:
-            if(!store_roll_no_b(n, stud)) return; // Read ascending values.
-            hasData = 1; // Mark that the array now contains values.
-            if(!ask_target(&target)) return; // Read the value to find.
-            idx = binaryS(target, n, stud); // Search by repeatedly halving the range.
-            if(idx != -1){
-            printf("Found at index %d\n", idx);
-            }else{printf("Target not found! :(\n");
-            }
-            break;
-            case 3:
-            if(hasData) displaystud(n, stud);
-            else printf("No roll numbers entered yet.\n");
-            break;
-            case 4:
-            opt = 4;
-            break;
-            default:
-            printf("Invalid Option");
         }
-
-
-    }while(opt != 4);
-
-    printf("Exited.");
-}
-
-int main(){
-
-    int n; // Store how many roll numbers the user wants to enter.
-    printf("How many roll numbers do you want to store?\n");
-    if(scanf("%d", &n) != 1 || n > 1000 || n < 1){
-        printf("Please enter an integer between 1-1000.");
-        return -1;
-    }
-    int stud[n]; // Create an array with exactly n roll-number slots.
-    ui(n, stud); // Start the menu-driven program.
-
+        printf("Enter roll number to search: ");
+        if(scanf("%d", &target) != 1) return 1;
+        if(choice == 1) index = linearS(target, n, stud);
+        else index = binaryS(target, n, stud);
+        if(index == -1) printf("Roll number not found.\n");
+        else printf("Found at index %d\n", index);
+    }while(choice != 3);
+    return 0;
 }
