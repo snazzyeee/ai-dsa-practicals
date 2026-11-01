@@ -20,24 +20,19 @@ int precedence(char op){
 
 int infixToPostfix(const char infix[], char postfix[]){
     char stack[MAX]; // Store operators and parentheses temporarily.
-    int top = -1, out = 0, expectOperand = 1; // Track stack top, output and expected token.
+    int top = -1, out = 0; // Track the operator stack and output positions.
 
     for(int i = 0; infix[i] != '\0'; i++){ // Read every input character.
         unsigned char ch = (unsigned char)infix[i]; // Store the current character safely.
         if(isalnum(ch)){
-            if(!expectOperand) return 0;
             postfix[out++] = (char)ch; // Put operands directly in postfix output.
-            expectOperand = 0;
         }else if(ch == '('){
-            if(!expectOperand) return 0;
             stack[++top] = (char)ch; // Keep an opening bracket on the stack.
         }else if(ch == ')'){
-            if(expectOperand) return 0;
             while(top >= 0 && stack[top] != '(') postfix[out++] = stack[top--]; // Pop enclosed operators.
             if(top < 0) return 0;
             top--;
         }else if(precedence((char)ch)){
-            if(expectOperand) return 0;
             // ^ is right associative, so equal ^ operators stay on the stack.
             while(top >= 0 && stack[top] != '(' &&
                   (precedence(stack[top]) > precedence((char)ch) ||
@@ -45,10 +40,8 @@ int infixToPostfix(const char infix[], char postfix[]){
                 postfix[out++] = stack[top--]; // Move higher-priority operators to output.
             }
             stack[++top] = (char)ch;
-            expectOperand = 1;
         }else return 0;
     }
-    if(expectOperand) return 0;
     while(top >= 0){
         if(stack[top] == '(') return 0;
         postfix[out++] = stack[top--];
