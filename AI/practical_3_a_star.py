@@ -4,7 +4,7 @@
 # Implement the A* search algorithm in Python to solve a pathfinding problem in a maze or grid-
 # based environment, using the cost from the start and a heuristic estimate to the goal.
 
-import heapq
+import heapq  # A heap is a priority queue: the smallest tuple comes out first.
 
 # 0 is a path, 1 is a wall; positions are (row, column).
 MAZE = [
@@ -28,10 +28,14 @@ def neighbors(maze, position):
             yield (next_row, next_col)  # Return an open cell inside the maze.
 
 
+# Manhattan distance adds the row difference and column difference. It is
+# the number of steps needed if there are no walls in the way.
 def heuristic(position, goal):
     return abs(position[0] - goal[0]) + abs(position[1] - goal[1])  # Estimate steps left.
 
 
+# A* chooses cells by f = g + h: g is the known distance from the start,
+# and h estimates the remaining distance. parent records the path taken.
 def a_star(maze, start, goal):
     frontier = [(heuristic(start, goal), 0, start)]  # Heap entries are (f, g, cell).
     cost = {start: 0}  # Store the cheapest known cost to every visited cell.

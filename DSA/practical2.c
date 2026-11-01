@@ -6,6 +6,8 @@
 
 #include <stdio.h>
 
+// Find the smallest value in the unsorted part and swap it into position i.
+// The sorted part grows by one position on every pass.
 void selectionSort(int n, float arr[]){
     for(int i = 0; i < n - 1; i++){ // Fill one sorted position on each pass.
         int smol = i; // Assume the first unsorted item is the smallest, smallest value's INDEX is stored in smol.
@@ -18,6 +20,8 @@ void selectionSort(int n, float arr[]){
     }
 }
 
+// Swap neighboring values whenever they are in the wrong order. After each
+// pass, the largest remaining value has moved to its place on the right.
 void bubbleSort(int n, float arr[]){
     for(int i = 0; i < n - 1; i++){ // Repeat enough passes to sort the list.
         for(int j = 0; j < n - i - 1; j++){ // Compare adjacent unsorted values.
@@ -34,11 +38,11 @@ int main(void){
     int n, opt; // Store the count and selected menu option.
     printf("Enter number of students (1-1000): ");
     if(scanf("%d", &n) != 1 || n < 1 || n > 1000) return 1;
-    float original[1000], sorted[1000]; // Keep original data and a sortable copy.
+    float sorted[1000]; // Sort the percentages directly in this one array.
 
     printf("Enter student percentages:\n");
     for(int i = 0; i < n; i++){ // Read every percentage.
-        if(scanf("%f", &original[i]) != 1 || original[i] < 0 || original[i] > 100){
+        if(scanf("%f", &sorted[i]) != 1 || sorted[i] < 0 || sorted[i] > 100){
             printf("Invalid percentage.\n");
             return 1;
         }
@@ -49,8 +53,7 @@ int main(void){
         if(scanf("%d", &opt) != 1) return 1;// check for integer input
         switch(opt){
         case 1:
-        case 2: // Start both sorts with the original percentages.
-            for(int i = 0; i < n; i++) sorted[i] = original[i]; // Restore unsorted input.
+        case 2: // Either method sorts this array; repeated sorts still work.
             if(opt == 1) selectionSort(n, sorted); // Run selection sort.
             else bubbleSort(n, sorted); // Run bubble sort.
             printf("Sorted percentages: ");

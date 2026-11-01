@@ -11,11 +11,15 @@
 
 typedef struct Node Node;
 
+// Each node holds one number and pointers to its left and right children.
+// In a normal BST, smaller values go left and larger values go right.
 struct Node {
     int data; // Store the value in this tree node.
     Node *left, *right; // Point to smaller and larger child nodes.
 };
 
+// Follow the appropriate left/right child until reaching NULL, then allocate
+// a new node there. Recursion returns each subtree's root to its parent.
 Node *insert(Node *root, int value){
     if(root == NULL){
         Node *node = malloc(sizeof *node); // Allocate one new tree node.
@@ -33,22 +37,25 @@ Node *insert(Node *root, int value){
     return root;
 }
 
+// The longest path counts nodes, not edges: an empty tree is 0, and a
+// single-node tree is 1. Recursively compare the left and right heights.
 int height(Node *root){
     if(root == NULL) return 0; // An empty branch has height zero.
     int left = height(root->left), right = height(root->right); // Find both branch heights.
     return 1 + (left > right ? left : right); // Count this node plus the taller branch.
 }
 
-int minimum(Node *root, int *value){
+void minimum(Node *root){
     if(root == NULL){
         printf("Tree is empty.\n");
-        return 0;
+        return;
     }
     while(root->left) root = root->left; // The leftmost BST node is the minimum.
-    *value = root->data; // Give the minimum back through the pointer.
-    return 1;
+    printf("Minimum: %d\n", root->data);
 }
 
+// Swapping children at every node reverses the tree. Mirroring it a second
+// time restores the original BST ordering used by insert and search.
 void mirror(Node *root){
     if(root == NULL) return;
     Node *temp = root->left; // Save the old left child.
@@ -58,6 +65,7 @@ void mirror(Node *root){
     mirror(root->right); // Mirror the new right subtree.
 }
 
+// Compare at the root and use BST ordering to choose only one subtree.
 int search(Node *root, int value){
     if(root == NULL) return 0;
     if(root->data == value) return 1;
@@ -94,7 +102,7 @@ int main(void){
             printf("Nodes on longest path: %d\n", height(root));
             break;
         case 3:
-            if(minimum(root, &value)) printf("Minimum: %d\n", value);
+            minimum(root);
             break;
         case 4:
             mirror(root);

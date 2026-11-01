@@ -12,6 +12,8 @@ RULES = [
     ({"headache", "nausea"}, "migraine"),
 ]
 
+# Forward chaining starts with known symptoms (facts), checks each IF rule,
+# and adds its THEN conclusion when every symptom in that rule is present.
 def diagnose(symptoms, rules):
     """Return the conclusions whose required symptoms are all present."""
     matches = []  # Start with no matching conclusions.
@@ -25,6 +27,7 @@ def main():
     print("Rule-based expert system")  # Show the program heading.
     entered = input("Enter symptoms separated by commas: ")  # Read user input.
     symptoms = set()  # A set stores each symptom only once.
+    # For example, "fever, cough" becomes the separate items "fever" and "cough".
     for item in entered.split(","):  # Separate the entered symptoms.
         item = item.strip().lower()  # Remove spaces and ignore letter case.
         if item:  # Ignore empty text between commas.

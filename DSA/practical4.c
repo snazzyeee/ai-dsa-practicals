@@ -10,19 +10,26 @@
 #include <stdlib.h>
 #include <string.h>
 
+// Each node is one member. The head points to the first node, and the
+// last node's next pointer is NULL to mark the end of the list.
 struct node{
     int prn; // Store the member's PRN.
     char name[31]; // Store a one-word member name.
     struct node *next; // Point to the next member.
 };
 
+// Return the head because inserting a president changes the first node.
+// The president goes first, secretary last, and members go in between.
 struct node *addMember(struct node *head, int prn, const char name[], int role){
     struct node *current = head;
 
-    if((role == 1 && head != NULL) ||
-       (role == 2 && (head == NULL || head->next == NULL)) ||
-       (role == 3 && (head == NULL || head->next != NULL))){
-        printf("Add a president first, then a secretary; add members between them.\n");
+    // A regular member must go between an existing president and secretary.
+    if(role == 2 && (head == NULL || head->next == NULL)){
+        printf("Add a president and secretary first.\n");
+        return head;
+    }
+    if(role == 3 && head == NULL){
+        printf("Add a president first.\n");
         return head;
     }
 
@@ -35,18 +42,23 @@ struct node *addMember(struct node *head, int prn, const char name[], int role){
     strcpy(newNode->name, name); // Copy the member name into the node.
     newNode->next = NULL; // New nodes initially have no following node.
 
-    if(head == NULL) return newNode; // The first node becomes the president.
-    if(role == 3){
-        head->next = newNode; // Add the secretary after the president.
-    }else{
-        current = head;
-        while(current->next->next != NULL) current = current->next; // Stop before secretary.
+    if(role == 1){ // A president goes at the beginning.
+        newNode->next = head;
+        return newNode;
+    }
+    if(role == 3){ // A secretary goes at the end.
+        while(current->next != NULL) current = current->next;
+        current->next = newNode;
+    }else{ // A member goes just before the secretary.
+        while(current->next->next != NULL) current = current->next;
         newNode->next = current->next; // Connect the new member to secretary.
         current->next = newNode; // Connect the previous member to the new member.
     }
     return head;
 }
 
+// Find the matching PRN and reconnect the previous node to the following one.
+// If the first node is deleted, return the new first node instead.
 struct node *deleteMember(struct node *head, int prn){
     struct node *current = head, *previous = NULL; // Track current and previous nodes.
     while(current && current->prn != prn){
@@ -76,6 +88,8 @@ void displayMembers(struct node *head){
     printf("Total members: %d\n", count);
 }
 
+// Join the last node of the first division to the first of the second.
+// The combined list's first and last nodes take the two leadership roles.
 struct node *concatenate(struct node *first, struct node *second){
     if(first == NULL) return second; // A blank first list becomes the second list.
     struct node *current = first;
@@ -107,15 +121,12 @@ int main(void){
         case 3: // These operations first need a division.
             printf("Division (1 or 2): ");
             if(scanf("%d", &division) != 1){ opt = 5; break; }
-            if(division < 1 || division > 2){
-                printf("Invalid division.\n");
-                continue;
-            }
-            division--;
+            if(division < 1 || division > 2){ printf("Invalid division.\n"); break; }
+            division--; // Convert division 1 or 2 to array index 0 or 1.
             if(opt == 1){
                 printf("Role (1: president, 2: member, 3: secretary): ");
                 if(scanf("%d", &role) != 1){ opt = 5; break; }
-                if(role < 1 || role > 3){ printf("Invalid role.\n"); continue; }
+                if(role < 1 || role > 3){ printf("Invalid role.\n"); break; }
                 printf("PRN and name (one word): ");
                 if(scanf("%d %30s", &prn, name) != 2){ opt = 5; break; }
                 lists[division] = addMember(lists[division], prn, name, role);

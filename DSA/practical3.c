@@ -10,7 +10,8 @@ struct Client {
 };
 struct Client table[MAX];
 
-// i is the collision attempt: 0, 1, 2, ...
+// A collision means another client already uses the intended slot. i counts
+// attempts (0, 1, 2, ...); % MAX wraps an index back into the table.
 int probe(int key, int i, int method) {
     int h = key % MAX;
     if (method == 1) return (h + i) % MAX;              // Linear
@@ -18,19 +19,17 @@ int probe(int key, int i, int method) {
     return (h + i * (1 + key % (MAX - 1))) % MAX;       // Double hashing
 }
 
+// Follow the chosen probe sequence until a free or matching ID slot is found.
 void insert(int method){
-    int id, index;
-    char name[31], phone[11];
+    int index;
+    struct Client client;
     printf("Enter non-negative ID, name and phone: ");
-    scanf("%d %30s %10s", &id, name, phone);
+    if (scanf("%d %30s %10s", &client.id, client.name, client.phone) != 3 || client.id < 0) return;
+    client.used = 1;
     for (int i = 0; i < MAX; i++){
-        index = probe(id, i, method);
-        if (!table[index].used || table[index].id == id) {
-            table[index].id = id;
-            table[index].used = 1;
-            // Read directly into the chosen slot.
-            snprintf(table[index].name, sizeof table[index].name, "%s", name);
-            snprintf(table[index].phone, sizeof table[index].phone, "%s", phone);
+        index = probe(client.id, i, method);
+        if (!table[index].used || table[index].id == client.id) {
+            table[index] = client; // Copy the entire record, including its name and phone.
             printf("Stored at index %d.\n", index);
             return;
         }
@@ -39,6 +38,7 @@ void insert(int method){
     printf("No slot found by this probing method.\n");
 }
 
+// Search must follow the same probe sequence that insertion used.
 void search(int method) {
     int id, index;
     printf("Enter ID: ");

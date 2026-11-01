@@ -11,6 +11,7 @@
 
 #define MAX 128
 
+// Larger numbers represent operators that must be applied earlier.
 int precedence(char op){
     if(op == '^') return 3; // Exponent has the highest precedence.
     if(op == '*' || op == '/') return 2; // Multiply and divide come next.
@@ -18,6 +19,8 @@ int precedence(char op){
     return 0; // Non-operators have no precedence.
 }
 
+// Infix puts operators between operands (2+3); postfix puts them after
+// operands (23+). A stack temporarily holds operators and parentheses.
 int infixToPostfix(const char infix[], char postfix[]){
     char stack[MAX]; // Store operators and parentheses temporarily.
     int top = -1, out = 0; // Track the operator stack and output positions.
@@ -50,6 +53,8 @@ int infixToPostfix(const char infix[], char postfix[]){
     return 1;
 }
 
+// Push operands onto a number stack. For an operator, pop right first and
+// then left, calculate left operator right, and push the result back.
 int evaluatePostfix(const char postfix[], double *result){
     double stack[MAX], values[256] = {0}; // Store operands and variable values.
     int known[256] = {0}, top = -1; // Remember known variables and stack top.

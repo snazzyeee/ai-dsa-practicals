@@ -9,11 +9,15 @@
 
 #define MAX 10
 
-typedef struct {
+// A circular queue serves the oldest order first (FIFO). front points to
+// the oldest order; rear points to where the next order will be inserted.
+typedef struct{
     int orders[MAX]; // Store order numbers.
     int front, rear, count; // Track oldest position, next free position and size.
-} Queue;
+}Queue;
 
+// q is a pointer: q->count accesses the count field of the actual queue.
+// Reject an order when count already equals the chosen capacity.
 void enqueue(Queue *q, int order, int capacity){
     if(q->count == capacity){
         printf("Queue is full.\n");
@@ -25,6 +29,8 @@ void enqueue(Queue *q, int order, int capacity){
     printf("Order %d added.\n", order);
 }
 
+// Dequeue serves the front order. The modulo operation wraps the index back
+// to 0 after the final slot, letting later orders reuse freed positions.
 void dequeue(Queue *q, int capacity){
     if(q->count == 0){
         printf("Queue is empty.\n");

@@ -9,6 +9,8 @@
 
 #include <stdio.h>
 
+// Linear search checks one roll number at a time, even in an unsorted array.
+// It returns the index when found and -1 when the target is absent.
 int linearS(int target, int n, int stud[]){
     for(int i = 0; i < n; i++){ // Check elements from the first to the last.
         if(target == stud[i]){ // Compare the target with the current element.
@@ -19,6 +21,8 @@ int linearS(int target, int n, int stud[]){
     
 }
 
+// Binary search needs ascending order. Check the middle, then discard the
+// half that cannot contain the target. Repeat until found or no range remains.
 int binaryS(int target, int n, int stud[]){
     int low = 0; // Start with the first possible index.
     int high = n-1; // End with the last possible index.

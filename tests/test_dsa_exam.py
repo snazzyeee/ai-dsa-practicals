@@ -8,6 +8,19 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 
 
 class ExamPracticals(unittest.TestCase):
+    def test_club_roles_and_join(self):
+        with tempfile.TemporaryDirectory() as folder:
+            executable = pathlib.Path(folder) / "club.exe"
+            subprocess.run(["gcc", str(ROOT / "DSA" / "practical4.c"), "-o", str(executable)], check=True)
+            inputs = ("1\n1\n1\n1 A\n1\n1\n3\n2 B\n1\n1\n2\n3 C\n"
+                      "1\n2\n1\n4 D\n1\n2\n3\n5 E\n4\n3\n1\n"
+                      "2\n1\n1\n2\n1\n5\n3\n1\n5\n")
+            result = subprocess.run([str(executable)], input=inputs, text=True, capture_output=True, timeout=5, check=True)
+            self.assertIn("1: A (president)", result.stdout)
+            self.assertIn("5: E (secretary)", result.stdout)
+            self.assertIn("Total members: 5", result.stdout)
+            self.assertIn("Total members: 3", result.stdout)
+
     def test_programs(self):
         cases = {
             1: ("4\n1\n9 3 7 2\n7\n2\n2 3 7 9\n3\n3\n", ["Found at index 2", "Found at index 1"]),

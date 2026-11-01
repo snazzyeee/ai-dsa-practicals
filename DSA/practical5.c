@@ -12,13 +12,33 @@
 #define ROWS 10
 #define SEATS 7
 
+// typedef gives the longer name "struct Seat" the shorter alias "Seat".
 typedef struct Seat Seat;
 
+// Each seat is one node. prev points backward and next points forward;
+// booked is 0 for an available seat and 1 for an occupied seat.
 struct Seat {
     int number, booked;
     Seat *prev, *next;
 };
 
+// rows is an array of head pointers: rows[0] points to the first seat in
+// row 1, rows[1] to the first seat in row 2, and so on.
+void displayAvailable(Seat *rows[ROWS]){
+    for(int row = 0; row < ROWS; row++){ // Visit each theatre row.
+        printf("Row %d:", row + 1);
+        // Follow next until the last seat points to NULL; no counter is needed.
+        for(Seat *seat = rows[row]; seat != NULL; seat = seat->next){ // Visit each seat.
+            if(seat->booked == 0) printf(" %d", seat->number); // Print free seats.
+        }
+        printf("\n");
+    }
+}
+
+// functions:
+
+// Build each row one seat at a time. last keeps the previous seat's address
+// so the new node can be connected in both directions.
 int createRows(Seat *rows[ROWS]){ 
     for(int row = 0; row < ROWS; row++){ // Create one linked list for every theatre row.
         Seat *last = NULL; // Track the previous seat while building a row.
@@ -37,19 +57,12 @@ int createRows(Seat *rows[ROWS]){
     return 1;
 }
 
-void displayAvailable(Seat *rows[ROWS]){
-    for(int row = 0; row < ROWS; row++){ // Visit each theatre row.
-        printf("Row %d:", row + 1);
-        for(Seat *seat = rows[row]; seat; seat = seat->next){ // Move through the row's list.
-            if(!seat->booked) printf(" %d", seat->number); // Print only free seats.
-        }
-        printf("\n");
-    }
-}
-
+// Search from this row's head until the seat number matches. The book
+// argument is 1 for booking and 0 for cancelling an existing booking.
 void changeBooking(Seat *row, int seat, int book){
-    while(row && row->number != seat) row = row->next; // Find the requested seat node.
+    while(row != NULL && row->number != seat) row = row->next; // Find the seat.
     if(row == NULL) printf("Seat not found.\n");
+    // condition ? first : second chooses first when true, otherwise second.
     else if(row->booked == book) printf(book ? "Seat already booked.\n" : "Seat is not booked.\n");
     else{
         row->booked = book; // 1 books a seat; 0 cancels its booking.
@@ -57,6 +70,8 @@ void changeBooking(Seat *row, int seat, int book){
     }
 }
 
+// malloc reserved memory for every seat; free it before the program ends.
+// Save next first, because a freed node must not be accessed again.
 void freeRows(Seat *rows[ROWS]){
     for(int row = 0; row < ROWS; row++){
         Seat *seat = rows[row];
@@ -65,22 +80,22 @@ void freeRows(Seat *rows[ROWS]){
             free(seat);
             seat = next;
         }
-        rows[row] = NULL;
     }
 }
 
 int main(void){
-    Seat *rows[ROWS] = {NULL};
-    int opt, row, seat, ok = 1;
+    Seat *rows[ROWS] = {NULL}; // Every row head starts empty (NULL).
+    int opt, row, seat;
     if(!createRows(rows)){
         printf("Memory allocation failed.\n");
         freeRows(rows);
         return 1;
     }
 
+    // do-while shows the menu repeatedly; switch runs the selected case.
     do{
         printf("\n1: Available seats  2: Book  3: Cancel  4: Exit\n");
-        if(scanf("%d", &opt) != 1){ ok = 0; break; }
+        if(scanf("%d", &opt) != 1) break;
         switch(opt){
         case 1:
             displayAvailable(rows);
@@ -88,13 +103,14 @@ int main(void){
         case 2:
         case 3: // Booking and cancelling both need a row and seat.
             printf("Row (1-10) and seat (1-7): ");
-            if(scanf("%d %d", &row, &seat) != 2){ ok = 0; opt = 4; break; }
+            if(scanf("%d %d", &row, &seat) != 2){ opt = 4; break; }
             if(row < 1 || row > ROWS || seat < 1 || seat > SEATS){
                 printf("Invalid row or seat.\n");
             }else if(opt == 2){
-                changeBooking(rows[row - 1], seat, 1);
+                // The user counts rows from 1, but array indices start at 0.
+                changeBooking(rows[row - 1], seat, 1); // Book the seat.
             }else{
-                changeBooking(rows[row - 1], seat, 0);
+                changeBooking(rows[row - 1], seat, 0); // Cancel the booking.
             }
             break;
         case 4: break;
@@ -103,6 +119,6 @@ int main(void){
     }while(opt != 4);
 
     freeRows(rows);
-    return ok ? 0 : 1;
+    return 0;
 }
 

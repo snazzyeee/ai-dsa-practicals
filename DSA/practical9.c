@@ -9,12 +9,8 @@
 
 #define MAX 10
 
-void addFlight(int graph[MAX][MAX], int from, int to, int cost){
-    graph[from][to] = cost; // Save the flight cost from the first city to the second.
-    graph[to][from] = cost; // Save the return flight because this graph is two-way.
-    printf("Flight added.\n");
-}
-
+// graph[i][j] stores the cost of a direct flight; 0 means no flight.
+// This program treats every flight as two-way, so both entries are filled.
 void displayGraph(int n, char cities[MAX][31], int graph[MAX][MAX]){
     for(int i = 0; i < n; i++){ // Print details for every city.
         printf("%s:", cities[i]);
@@ -25,6 +21,8 @@ void displayGraph(int n, char cities[MAX][31], int graph[MAX][MAX]){
     }
 }
 
+// Depth-first search marks a city, then recursively follows each flight to
+// an unvisited city. visited prevents loops when routes lead back again.
 void dfs(int n, int graph[MAX][MAX], int city, int visited[]){
     visited[city] = 1; // Mark this city as reachable.
     for(int next = 0; next < n; next++){ // Check every possible next city.
@@ -32,6 +30,8 @@ void dfs(int n, int graph[MAX][MAX], int city, int visited[]){
     }
 }
 
+// Because flights are two-way, reaching every city from city 0 means every
+// city can also reach every other city through some sequence of flights.
 int isConnected(int n, int graph[MAX][MAX]){
     int visited[MAX] = {0}; // Start with no city marked reachable.
     dfs(n, graph, 0, visited); // Visit every city reachable from city zero.
@@ -63,7 +63,9 @@ int main(void){
             if(from < 1 || from > n || to < 1 || to > n || cost <= 0){
                 printf("Invalid city number or cost.\n");
             }else{
-                addFlight(graph, from - 1, to - 1, cost); // Convert user numbers to array indices.
+                // Subtract 1 to convert city numbers to array indices.
+                graph[from - 1][to - 1] = graph[to - 1][from - 1] = cost;
+                printf("Flight added.\n");
             }
             break;
         case 2:

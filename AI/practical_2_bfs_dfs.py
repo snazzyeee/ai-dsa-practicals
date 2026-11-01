@@ -5,7 +5,7 @@
 # Find a path from the start to the goal while avoiding walls, and compare the traversal paths and
 # efficiency of both algorithms.
 
-from collections import deque
+from collections import deque  # A deque supports adding at the back and removing at the front.
 
 # 0 is a path, 1 is a wall; positions are (row, column).
 MAZE = [
@@ -19,6 +19,8 @@ START = (0, 0)
 GOAL = (4, 4)
 
 
+# Each (row change, column change) describes one step: up, down, left, right.
+# yield supplies valid neighbors one at a time to the caller's for loop.
 def neighbors(maze, position):
     row, col = position  # Split the current position into row and column.
     for dr, dc in ((-1, 0), (1, 0), (0, -1), (0, 1)):  # Try four directions.
@@ -29,6 +31,8 @@ def neighbors(maze, position):
             yield (next_row, next_col)  # Return one valid neighbor.
 
 
+# BFS uses a FIFO queue: the cell added first is explored first. This explores
+# cells by distance and finds a shortest path when each move costs one step.
 def bfs(maze, start, goal):
     queue = deque([start])  # Put the start cell into the BFS queue.
     parent = {start: None}  # Store the previous cell for path reconstruction.
@@ -46,6 +50,8 @@ def bfs(maze, start, goal):
     return [], expanded  # Return an empty path when the goal cannot be reached.
 
 
+# DFS uses a stack: the most recently added cell is explored first. It finds
+# a path if one exists, though that path does not have to be the shortest.
 def dfs(maze, start, goal):
     stack = [start]  # Put the start cell into the DFS stack.
     parent = {start: None}  # Store previous cells for the final path.
@@ -63,6 +69,8 @@ def dfs(maze, start, goal):
     return [], expanded  # Return an empty path when no route exists.
 
 
+# parent maps each discovered cell to the cell it came from. Follow those
+# links backward from the goal, then reverse the list to show start to goal.
 def build_path(parent, goal):
     path = []  # Start with an empty path.
     current = goal  # Begin backtracking at the goal.
@@ -92,11 +100,7 @@ def show_maze(maze, path, start, goal):
 
 
 def run_search(name, algorithm):
-    try:
-        path, expanded = algorithm(MAZE, START, GOAL)
-    except NotImplementedError as error:
-        print(error)
-        return
+    path, expanded = algorithm(MAZE, START, GOAL)
 
     print(f"\n{name}:")
     if path:
