@@ -17,14 +17,7 @@ struct node{
 };
 
 struct node *addMember(struct node *head, int prn, const char name[], int role){
-    struct node *current = head; // Start checking at the first member.
-    while(current){ // Check every existing member for a duplicate PRN.
-        if(current->prn == prn){
-            printf("PRN already exists.\n");
-            return head;
-        }
-        current = current->next; // Move to the next member.
-    }
+    struct node *current = head;
 
     if((role == 1 && head != NULL) ||
        (role == 2 && (head == NULL || head->next == NULL)) ||
@@ -101,16 +94,16 @@ void freeList(struct node *head){
 
 int main(void){
     struct node *lists[2] = {NULL, NULL};
-    int opt, division, prn, role, ok = 1;
+    int opt, division, prn, role;
     char name[31];
 
     do{
         printf("\n1: Add member  2: Delete member  3: Display and count\n");
         printf("4: Join divisions  5: Exit\n");
-        if(scanf("%d", &opt) != 1){ ok = 0; break; }
+        if(scanf("%d", &opt) != 1) break;
         if(opt >= 1 && opt <= 3){
             printf("Division (1 or 2): ");
-            if(scanf("%d", &division) != 1){ ok = 0; break; }
+            if(scanf("%d", &division) != 1) break;
             if(division < 1 || division > 2){
                 printf("Invalid division.\n");
                 continue;
@@ -118,14 +111,14 @@ int main(void){
             division--;
             if(opt == 1){
                 printf("Role (1: president, 2: member, 3: secretary): ");
-                if(scanf("%d", &role) != 1){ ok = 0; break; }
+                if(scanf("%d", &role) != 1) break;
                 if(role < 1 || role > 3){ printf("Invalid role.\n"); continue; }
                 printf("PRN and name (one word): ");
-                if(scanf("%d %30s", &prn, name) != 2){ ok = 0; break; }
+                if(scanf("%d %30s", &prn, name) != 2) break;
                 lists[division] = addMember(lists[division], prn, name, role);
             }else if(opt == 2){
                 printf("PRN to delete: ");
-                if(scanf("%d", &prn) != 1){ ok = 0; break; }
+                if(scanf("%d", &prn) != 1) break;
                 lists[division] = deleteMember(lists[division], prn);
             }else displayMembers(lists[division]);
         }else if(opt == 4){
@@ -137,7 +130,7 @@ int main(void){
 
     freeList(lists[0]);
     freeList(lists[1]);
-    return ok ? 0 : 1;
+    return 0;
 }
 
 
