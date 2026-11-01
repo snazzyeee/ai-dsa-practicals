@@ -44,7 +44,7 @@ int isConnected(int n, int graph[MAX][MAX]){
 int main(void){
     int graph[MAX][MAX] = {{0}}; // Start with no flights in the adjacency matrix.
     char cities[MAX][31]; // Store one name for each city.
-    int n, opt, from, to, cost, connected; // Store input and menu values.
+    int n, opt, from, to, cost; // Store input and menu values.
 
     printf("Number of cities (1-%d): ", MAX);
     if(scanf("%d", &n) != 1 || n < 1 || n > MAX) return 1;
@@ -67,8 +67,8 @@ int main(void){
         }else if(opt == 2){
             displayGraph(n, cities, graph);
         }else if(opt == 3){
-            connected = isConnected(n, graph);
-            if(connected >= 0) printf(connected ? "Connected.\n" : "Not connected.\n");
+            if(isConnected(n, graph)) printf("Connected.\n");
+            else printf("Not connected.\n");
         }else if(opt != 4){
             printf("Invalid option.\n");
         }
