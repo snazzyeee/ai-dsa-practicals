@@ -19,7 +19,7 @@ struct Seat {
     Seat *prev, *next;
 };
 
-int createRows(Seat *rows[ROWS]){
+int createRows(Seat *rows[ROWS]){ 
     for(int row = 0; row < ROWS; row++){ // Create one linked list for every theatre row.
         Seat *last = NULL; // Track the previous seat while building a row.
         for(int seat = 1; seat <= SEATS; seat++){ // Create the seven seats in this row.
@@ -47,23 +47,13 @@ void displayAvailable(Seat *rows[ROWS]){
     }
 }
 
-void bookSeat(Seat *row, int seat){
+void changeBooking(Seat *row, int seat, int book){
     while(row && row->number != seat) row = row->next; // Find the requested seat node.
     if(row == NULL) printf("Seat not found.\n");
-    else if(row->booked) printf("Seat already booked.\n");
+    else if(row->booked == book) printf(book ? "Seat already booked.\n" : "Seat is not booked.\n");
     else{
-        row->booked = 1; // Mark the available seat as booked.
-        printf("Seat booked.\n");
-    }
-}
-
-void cancelSeat(Seat *row, int seat){
-    while(row && row->number != seat) row = row->next; // Find the requested seat node.
-    if(row == NULL) printf("Seat not found.\n");
-    else if(!row->booked) printf("Seat is not booked.\n");
-    else{
-        row->booked = 0; // Mark the booked seat as free.
-        printf("Booking cancelled.\n");
+        row->booked = book; // 1 books a seat; 0 cancels its booking.
+        printf(book ? "Seat booked.\n" : "Booking cancelled.\n");
     }
 }
 
@@ -99,9 +89,9 @@ int main(void){
             if(row < 1 || row > ROWS || seat < 1 || seat > SEATS){
                 printf("Invalid row or seat.\n");
             }else if(opt == 2){
-                bookSeat(rows[row - 1], seat);
+                changeBooking(rows[row - 1], seat, 1);
             }else{
-                cancelSeat(rows[row - 1], seat);
+                changeBooking(rows[row - 1], seat, 0);
             }
         }else if(opt != 4){
             printf("Invalid option.\n");
