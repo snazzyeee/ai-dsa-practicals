@@ -11,36 +11,36 @@
 
 #define MAX 128
 
-// Larger numbers represent operators that must be applied earlier.
+
 int precedence(char op){
-    if(op == '^') return 3; // Exponent has the highest precedence.
-    if(op == '*' || op == '/') return 2; // Multiply and divide come next.
-    if(op == '+' || op == '-') return 1; // Add and subtract come last.
-    return 0; // Non-operators have no precedence.
+    if(op == '^') return 3; 
+    if(op == '*' || op == '/') return 2; 
+    if(op == '+' || op == '-') return 1; 
+    return 0; 
 }
 
-// Infix puts operators between operands (2+3); postfix puts them after
-// operands (23+). A stack temporarily holds operators and parentheses.
-int infixToPostfix(const char infix[], char postfix[]){
-    char stack[MAX]; // Store operators and parentheses temporarily.
-    int top = -1, out = 0; // Track the operator stack and output positions.
 
-    for(int i = 0; infix[i] != '\0'; i++){ // Read every input character.
-        unsigned char ch = (unsigned char)infix[i]; // Store the current character safely.
+
+int infixToPostfix(char infix[], char postfix[]){
+    char stack[MAX]; 
+    int top = -1, out = 0; 
+
+    for(int i = 0; infix[i] != '\0'; i++){ 
+        unsigned char ch = (unsigned char)infix[i]; 
         if(isalnum(ch)){
-            postfix[out++] = (char)ch; // Put operands directly in postfix output.
+            postfix[out++] = (char)ch; 
         }else if(ch == '('){
-            stack[++top] = (char)ch; // Keep an opening bracket on the stack.
+            stack[++top] = (char)ch; 
         }else if(ch == ')'){
-            while(top >= 0 && stack[top] != '(') postfix[out++] = stack[top--]; // Pop enclosed operators.
+            while(top >= 0 && stack[top] != '(') postfix[out++] = stack[top--]; 
             if(top < 0) return 0;
             top--;
         }else if(precedence((char)ch)){
-            // ^ is right associative, so equal ^ operators stay on the stack.
+            
             while(top >= 0 && stack[top] != '(' &&
                   (precedence(stack[top]) > precedence((char)ch) ||
                    (precedence(stack[top]) == precedence((char)ch) && ch != '^'))){
-                postfix[out++] = stack[top--]; // Move higher-priority operators to output.
+                postfix[out++] = stack[top--]; 
             }
             stack[++top] = (char)ch;
         }else return 0;
@@ -49,30 +49,31 @@ int infixToPostfix(const char infix[], char postfix[]){
         if(stack[top] == '(') return 0;
         postfix[out++] = stack[top--];
     }
-    postfix[out] = '\0'; // End the postfix string.
+    postfix[out] = '\0'; 
     return 1;
 }
 
-// Push operands onto a number stack. For an operator, pop right first and
-// then left, calculate left operator right, and push the result back.
-int evaluatePostfix(const char postfix[], double *result){
-    double stack[MAX], values[256] = {0}; // Store operands and variable values.
-    int known[256] = {0}, top = -1; // Remember known variables and stack top.
+
+
+// Pop the right operand before the left one.
+int evaluatePostfix(char postfix[], double *result){
+    double stack[MAX], values[256] = {0}; 
+    int known[256] = {0}, top = -1; 
 
     for(int i = 0; postfix[i] != '\0'; i++){
         unsigned char ch = (unsigned char)postfix[i];
         if(isdigit(ch)){
-            stack[++top] = ch - '0'; // Convert a digit character to its numeric value.
+            stack[++top] = ch - '0'; 
         }else if(isalpha(ch)){
             if(!known[ch]){
                 printf("Enter value for %c: ", ch);
-                if(scanf("%lf", &values[ch]) != 1 || !isfinite(values[ch])) return 0;
-                known[ch] = 1; // Do not ask for the same variable again.
+                scanf("%lf", &values[ch]);
+                known[ch] = 1; 
             }
             stack[++top] = values[ch];
         }else{
             if(top < 1) return 0;
-            double right = stack[top--], left = stack[top--], value; // Pop operands in correct order.
+            double right = stack[top--], left = stack[top--], value; 
             if(ch == '+') value = left + right;
             else if(ch == '-') value = left - right;
             else if(ch == '*') value = left * right;
@@ -81,12 +82,12 @@ int evaluatePostfix(const char postfix[], double *result){
                 value = left / right;
             }else if(ch == '^') value = pow(left, right);
             else return 0;
-            if(!isfinite(value)) return 0;
+
             stack[++top] = value;
         }
     }
     if(top != 0) return 0;
-    *result = stack[top]; // Give the final stack value to the caller.
+    *result = stack[top]; 
     return 1;
 }
 
@@ -97,11 +98,11 @@ int main(void){
 
     do{
         printf("\n1: Convert and evaluate  2: Exit\n");
-        if(scanf("%d", &choice) != 1) return 1;
+        scanf("%d", &choice);
         switch(choice){
         case 1:
             printf("Enter infix expression without spaces: ");
-            if(scanf("%127s", infix) != 1) return 1;
+            scanf("%127s", infix);
             if(infixToPostfix(infix, postfix)){
                 printf("Postfix: %s\n", postfix);
                 if(evaluatePostfix(postfix, &result)) printf("Result: %g\n", result);
@@ -109,7 +110,7 @@ int main(void){
             }else printf("Invalid infix expression.\n");
             break;
         case 2: break;
-        default: printf("Invalid option.\n");
+
         }
     }while(choice != 2);
     return 0;

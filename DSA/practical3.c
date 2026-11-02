@@ -10,39 +10,40 @@ struct Client {
 };
 struct Client table[MAX];
 
-// A collision means another client already uses the intended slot. i counts
-// attempts (0, 1, 2, ...); % MAX wraps an index back into the table.
+
+
+// Try another slot when there is a collision.
 int probe(int key, int i, int method) {
     int h = key % MAX;
-    if (method == 1) return (h + i) % MAX;              // Linear
-    if (method == 2) return (h + i * i) % MAX;          // Quadratic
-    return (h + i * (1 + key % (MAX - 1))) % MAX;       // Double hashing
+    if (method == 1) return (h + i) % MAX;              
+    if (method == 2) return (h + i * i) % MAX;          
+    return (h + i * (1 + key % (MAX - 1))) % MAX;       
 }
 
-// Follow the chosen probe sequence until a free or matching ID slot is found.
+
 void insert(int method){
     int index;
     struct Client client;
     printf("Enter non-negative ID, name and phone: ");
-    if (scanf("%d %30s %10s", &client.id, client.name, client.phone) != 3 || client.id < 0) return;
+    scanf("%d %30s %10s", &client.id, client.name, client.phone);
     client.used = 1;
     for (int i = 0; i < MAX; i++){
         index = probe(client.id, i, method);
         if (!table[index].used || table[index].id == client.id) {
-            table[index] = client; // Copy the entire record, including its name and phone.
+            table[index] = client; 
             printf("Stored at index %d.\n", index);
             return;
         }
     }
-    // Quadratic probing can revisit slots before finding every empty slot.
+    
     printf("No slot found by this probing method.\n");
 }
 
-// Search must follow the same probe sequence that insertion used.
+
 void search(int method) {
     int id, index;
     printf("Enter ID: ");
-    if (scanf("%d", &id) != 1 || id < 0) return;
+    scanf("%d", &id);
     for (int i = 0; i < MAX; i++) {
         index = probe(id, i, method);
         if (!table[index].used) break;
@@ -71,7 +72,7 @@ int main(void){
             }
             break;
         case 4: break;
-        default: printf("Invalid option.\n");
+
         }
     } while (choice != 4);
     return 0;

@@ -9,35 +9,36 @@
 
 #include <stdio.h>
 
-// Linear search checks one roll number at a time, even in an unsorted array.
-// It returns the index when found and -1 when the target is absent.
+
+
 int linearS(int target, int n, int stud[]){
-    for(int i = 0; i < n; i++){ // Check elements from the first to the last.
-        if(target == stud[i]){ // Compare the target with the current element.
-            return i; // Return its index when it matches.
+    for(int i = 0; i < n; i++){ 
+        if(target == stud[i]){ 
+            return i; 
         }
     }
-    return -1; // Tell the caller that no match exists.
+    return -1; 
     
 }
 
-// Binary search needs ascending order. Check the middle, then discard the
-// half that cannot contain the target. Repeat until found or no range remains.
+
+
+// Binary search needs sorted roll numbers.
 int binaryS(int target, int n, int stud[]){
-    int low = 0; // Start with the first possible index.
-    int high = n-1; // End with the last possible index.
+    int low = 0; 
+    int high = n-1; 
     
-    while(low <= high){ // Continue while a search range remains.
-        int mid = (high + low)/2; // Find the middle index.
+    while(low <= high){ 
+        int mid = (high + low)/2; 
         
         if(target == stud[mid]){
-            return mid; // The target is at the middle index.
+            return mid; 
         }
         else if(target < stud[mid]){
-            high = mid - 1; // Discard the larger right half.
+            high = mid - 1; 
         }
         else{
-            low = mid + 1; // Discard the smaller left half.
+            low = mid + 1; 
         }
     }
     return -1;
@@ -46,35 +47,30 @@ int binaryS(int target, int n, int stud[]){
 
 int main(void){
     int n, choice, target, index;
-    int stud[1000]; // Store up to 1000 roll numbers.
+    int stud[1000]; 
     printf("How many roll numbers (1-1000)? ");
-    if(scanf("%d", &n) != 1 || n < 1 || n > 1000) return 1;
+    scanf("%d", &n);
 
     do{
         printf("\n1: Linear search  2: Binary search  3: Exit\n");
-        if(scanf("%d", &choice) != 1) return 1;
+        scanf("%d", &choice);
         switch(choice){
         case 1:
-        case 2: // Both searches need roll numbers and a target.
+        case 2: 
         if(choice == 1) printf("Enter each student's roll-no (unsorted):\n");
         else printf("Enter each student's roll-no in ascending order:\n");
         for(int i = 0; i < n; i++){
-            if(scanf("%d", &stud[i]) != 1) return 1;
-            // Binary search only works when the input is sorted.
-            if(choice == 2 && i > 0 && stud[i] < stud[i - 1]){
-                printf("Roll numbers must be in ascending order.\n");
-                return 1;
-            }
+            scanf("%d", &stud[i]);
         }
         printf("Enter roll number to search: ");
-        if(scanf("%d", &target) != 1) return 1;
+        scanf("%d", &target);
         if(choice == 1) index = linearS(target, n, stud);
         else index = binaryS(target, n, stud);
         if(index == -1) printf("Roll number not found.\n");
         else printf("Found at index %d\n", index);
         break;
-        case 3: break; // The loop ends after this case.
-        default: printf("Invalid option.\n");
+        case 3: break; 
+
         }
     }while(choice != 3);
     return 0;

@@ -12,66 +12,67 @@
 #define ROWS 10
 #define SEATS 7
 
-// typedef gives the longer name "struct Seat" the shorter alias "Seat".
+
 typedef struct Seat Seat;
 
-// Each seat is one node. prev points backward and next points forward;
-// booked is 0 for an available seat and 1 for an occupied seat.
+
+
 struct Seat {
     int number, booked;
     Seat *prev, *next;
 };
 
-// rows is an array of head pointers: rows[0] points to the first seat in
-// row 1, rows[1] to the first seat in row 2, and so on.
+
+
 void displayAvailable(Seat *rows[ROWS]){
-    for(int row = 0; row < ROWS; row++){ // Visit each theatre row.
+    for(int row = 0; row < ROWS; row++){ 
         printf("Row %d:", row + 1);
-        // Follow next until the last seat points to NULL; no counter is needed.
-        for(Seat *seat = rows[row]; seat != NULL; seat = seat->next){ // Visit each seat.
-            if(seat->booked == 0) printf(" %d", seat->number); // Print free seats.
+        
+        for(Seat *seat = rows[row]; seat != NULL; seat = seat->next){ 
+            if(seat->booked == 0) printf(" %d", seat->number); 
         }
         printf("\n");
     }
 }
 
-// functions:
 
-// Build each row one seat at a time. last keeps the previous seat's address
-// so the new node can be connected in both directions.
-int createRows(Seat *rows[ROWS]){ 
-    for(int row = 0; row < ROWS; row++){ // Create one linked list for every theatre row.
-        Seat *last = NULL; // Track the previous seat while building a row.
-        for(int seat = 1; seat <= SEATS; seat++){ // Create the seven seats in this row.
-            Seat *node = malloc(sizeof *node); // Allocate memory for one seat.
-            if(node == NULL) return 0; // Report failure when memory is unavailable.
-            node->number = seat; // Store this seat number.
-            node->booked = (row == 0 && seat == 1) || (row == 2 && seat == 4); // Add initial bookings.
-            node->prev = last; // Link backwards to the previous seat.
-            node->next = NULL; // The new seat has no next seat yet.
-            if(last) last->next = node; // Link the previous seat forward.
-            else rows[row] = node; // Save the first seat as the row head.
-            last = node; // Make this seat the previous seat for the next loop.
+
+
+
+
+void createRows(Seat *rows[ROWS]){ 
+    for(int row = 0; row < ROWS; row++){ 
+        Seat *last = NULL; 
+        for(int seat = 1; seat <= SEATS; seat++){ 
+            Seat *node = malloc(sizeof *node); 
+
+            node->number = seat; 
+            node->booked = (row == 0 && seat == 1) || (row == 2 && seat == 4); 
+            node->prev = last; 
+            node->next = NULL; 
+            if(last) last->next = node; 
+            else rows[row] = node; 
+            last = node; 
         }
     }
-    return 1;
 }
 
-// Search from this row's head until the seat number matches. The book
-// argument is 1 for booking and 0 for cancelling an existing booking.
+
+
+// book = 1 to reserve a seat, 0 to cancel.
 void changeBooking(Seat *row, int seat, int book){
-    while(row != NULL && row->number != seat) row = row->next; // Find the seat.
+    while(row != NULL && row->number != seat) row = row->next; 
     if(row == NULL) printf("Seat not found.\n");
-    // condition ? first : second chooses first when true, otherwise second.
+    
     else if(row->booked == book) printf(book ? "Seat already booked.\n" : "Seat is not booked.\n");
     else{
-        row->booked = book; // 1 books a seat; 0 cancels its booking.
+        row->booked = book; 
         printf(book ? "Seat booked.\n" : "Booking cancelled.\n");
     }
 }
 
-// malloc reserved memory for every seat; free it before the program ends.
-// Save next first, because a freed node must not be accessed again.
+
+
 void freeRows(Seat *rows[ROWS]){
     for(int row = 0; row < ROWS; row++){
         Seat *seat = rows[row];
@@ -84,37 +85,31 @@ void freeRows(Seat *rows[ROWS]){
 }
 
 int main(void){
-    Seat *rows[ROWS] = {NULL}; // Every row head starts empty (NULL).
+    Seat *rows[ROWS] = {NULL}; 
     int opt, row, seat;
-    if(!createRows(rows)){
-        printf("Memory allocation failed.\n");
-        freeRows(rows);
-        return 1;
-    }
+    createRows(rows);
 
-    // do-while shows the menu repeatedly; switch runs the selected case.
+    
     do{
         printf("\n1: Available seats  2: Book  3: Cancel  4: Exit\n");
-        if(scanf("%d", &opt) != 1) break;
+        scanf("%d", &opt);
         switch(opt){
         case 1:
             displayAvailable(rows);
             break;
         case 2:
-        case 3: // Booking and cancelling both need a row and seat.
+        case 3: 
             printf("Row (1-10) and seat (1-7): ");
-            if(scanf("%d %d", &row, &seat) != 2){ opt = 4; break; }
-            if(row < 1 || row > ROWS || seat < 1 || seat > SEATS){
-                printf("Invalid row or seat.\n");
-            }else if(opt == 2){
-                // The user counts rows from 1, but array indices start at 0.
-                changeBooking(rows[row - 1], seat, 1); // Book the seat.
+            scanf("%d %d", &row, &seat);
+            if(opt == 2){
+                
+                changeBooking(rows[row - 1], seat, 1); 
             }else{
-                changeBooking(rows[row - 1], seat, 0); // Cancel the booking.
+                changeBooking(rows[row - 1], seat, 0); 
             }
             break;
         case 4: break;
-        default: printf("Invalid option.\n");
+
         }
     }while(opt != 4);
 

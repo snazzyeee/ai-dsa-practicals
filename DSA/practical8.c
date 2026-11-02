@@ -11,38 +11,35 @@
 
 typedef struct Node Node;
 
-// Each node holds one number and pointers to its left and right children.
-// In a normal BST, smaller values go left and larger values go right.
+
+
 struct Node {
-    int data; // Store the value in this tree node.
-    Node *left, *right; // Point to smaller and larger child nodes.
+    int data; 
+    Node *left, *right; 
 };
 
-// Follow the appropriate left/right child until reaching NULL, then allocate
-// a new node there. Recursion returns each subtree's root to its parent.
+
+
 Node *insert(Node *root, int value){
     if(root == NULL){
-        Node *node = malloc(sizeof *node); // Allocate one new tree node.
-        if(node == NULL){
-            printf("Memory allocation failed.\n");
-            return NULL;
-        }
-        node->data = value; // Save the inserted value.
-        node->left = node->right = NULL; // New nodes start without children.
+        
+        Node *node = malloc(sizeof *node); 
+        node->data = value; 
+        node->left = node->right = NULL; 
         return node;
     }
-    if(value < root->data) root->left = insert(root->left, value); // Insert smaller values left.
-    else if(value > root->data) root->right = insert(root->right, value); // Insert larger values right.
+    if(value < root->data) root->left = insert(root->left, value); 
+    else if(value > root->data) root->right = insert(root->right, value); 
     else printf("Value already exists.\n");
     return root;
 }
 
-// The longest path counts nodes, not edges: an empty tree is 0, and a
-// single-node tree is 1. Recursively compare the left and right heights.
+
+
 int height(Node *root){
-    if(root == NULL) return 0; // An empty branch has height zero.
-    int left = height(root->left), right = height(root->right); // Find both branch heights.
-    return 1 + (left > right ? left : right); // Count this node plus the taller branch.
+    if(root == NULL) return 0; 
+    int left = height(root->left), right = height(root->right); 
+    return 1 + (left > right ? left : right); 
 }
 
 void minimum(Node *root){
@@ -50,22 +47,23 @@ void minimum(Node *root){
         printf("Tree is empty.\n");
         return;
     }
-    while(root->left) root = root->left; // The leftmost BST node is the minimum.
+    while(root->left) root = root->left; 
     printf("Minimum: %d\n", root->data);
 }
 
-// Swapping children at every node reverses the tree. Mirroring it a second
-// time restores the original BST ordering used by insert and search.
+
+
+// Swap both children at every node.
 void mirror(Node *root){
     if(root == NULL) return;
-    Node *temp = root->left; // Save the old left child.
-    root->left = root->right; // Move right child to left.
-    root->right = temp; // Move saved left child to right.
-    mirror(root->left); // Mirror the new left subtree.
-    mirror(root->right); // Mirror the new right subtree.
+    Node *temp = root->left; 
+    root->left = root->right; 
+    root->right = temp; 
+    mirror(root->left); 
+    mirror(root->right); 
 }
 
-// Compare at the root and use BST ordering to choose only one subtree.
+
 int search(Node *root, int value){
     if(root == NULL) return 0;
     if(root->data == value) return 1;
@@ -87,7 +85,7 @@ int main(void){
     do{
         printf("\n1: Insert  2: Longest path  3: Minimum  4: Mirror\n");
         printf("5: Search  6: Exit\n");
-        if(scanf("%d", &opt) != 1) break;
+        scanf("%d", &opt);
         if(mirrored && (opt == 1 || opt == 3 || opt == 5)){
             printf("Mirror the tree back before using BST insert, minimum or search.\n");
             continue;
@@ -95,7 +93,7 @@ int main(void){
         switch(opt){
         case 1:
             printf("Value to insert: ");
-            if(scanf("%d", &value) != 1){ opt = 6; break; }
+            scanf("%d", &value);
             root = insert(root, value);
             break;
         case 2:
@@ -106,17 +104,17 @@ int main(void){
             break;
         case 4:
             mirror(root);
-            mirrored = !mirrored; // a mirrored tree is not normally ordered as a BST.
+            mirrored = !mirrored; 
             printf("Tree mirrored.\n");
             break;
         case 5:
             printf("Value to search: ");
-            if(scanf("%d", &value) != 1){ opt = 6; break; }
+            scanf("%d", &value);
             if(search(root, value)) printf("Found.\n");
             else printf("Not found.\n");
             break;
         case 6: break;
-        default: printf("Invalid option.\n");
+
         }
     }while(opt != 6);
     freeTree(root);
