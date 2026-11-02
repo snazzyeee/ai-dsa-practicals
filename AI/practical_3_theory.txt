@@ -1,0 +1,65 @@
+============================================================
+AI PRACTICAL 3 - A* SEARCH
+============================================================
+Source: SE_AI_LAB_MANUAL.pdf, assignment 3, PDF pages 21-26.
+Revision notes based on the manual; viva questions are study aids.
+
+AIM
+Find an optimal path in a grid or graph using actual cost and a heuristic.
+
+SAY THIS IN VIVA
+A* is an informed search algorithm that expands the node with the
+lowest estimated total path cost, calculated as f(n) = g(n) + h(n).
+
+CORE THEORY
+- g(n): actual best-known cost from the start to node n.
+- h(n): estimated remaining cost from n to the goal.
+- f(n): estimated total cost of a solution through n.
+- Open list: discovered nodes waiting to be explored; often a priority queue.
+- Closed list: nodes already expanded in implementations that use one.
+- Parent map: records the route for path reconstruction.
+
+An admissible heuristic never overestimates the true remaining cost.
+A consistent heuristic obeys h(n) <= cost(n, next) + h(next).
+For graph search that never reopens closed nodes, consistency supports
+optimality. With an admissible but inconsistent heuristic, better routes
+may require reopening nodes. Assume ordinary nonnegative edge costs.
+
+FORMULAS
+Manhattan distance: |r1-r2| + |c1-c2|, suitable for four-direction unit moves.
+Euclidean distance: sqrt((x1-x2)^2 + (y1-y2)^2), a straight-line estimate.
+
+WORKING / ALGORITHM
+1. Put the start in a priority queue with g = 0.
+2. Remove the node with the smallest f value.
+3. If it is the goal, reconstruct and return the path.
+4. For each valid neighbor, calculate a possible new g value.
+5. If the route is cheaper, update its cost, parent and priority.
+6. Repeat until the goal is reached or no candidates remain.
+
+EXAMPLE
+Candidate A has g = 4 and h = 3, so f = 7.
+Candidate B has g = 2 and h = 6, so f = 8.
+A* explores A first because its estimated total cost is smaller.
+
+LIKELY VIVA QUESTIONS
+Q: Why is A* informed?
+A: It uses a heuristic estimate to guide exploration toward the goal.
+
+Q: What if h(n) is zero everywhere?
+A: A* behaves like uniform-cost search.
+
+Q: A* versus greedy best-first search?
+A: A* uses g + h; greedy best-first uses only h.
+
+Q: Is A* always faster than BFS?
+A: No. It depends on the heuristic and problem; maintaining priorities costs work.
+
+Q: Main limitation?
+A: It can use substantial memory to store the frontier and recorded states.
+
+APPLICATIONS AND CONCLUSION
+Route planning, robot navigation and game pathfinding.
+The heuristic must match the allowed moves and costs.
+
+REMEMBER: A* = cost so far + estimated cost left.

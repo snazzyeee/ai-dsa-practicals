@@ -1,0 +1,64 @@
+============================================================
+AI PRACTICAL 8 - VIDEO GENERATION AI TOOLS
+============================================================
+Source: SE_AI_LAB_MANUAL.pdf, assignment 8, PDF pages 52-54.
+Revision notes based on the manual; viva questions are study aids.
+This is a conceptual study guide, not a record of experiments performed.
+
+AIM
+Study how AI tools turn text prompts into realistic or animated videos.
+
+SAY THIS IN VIVA
+AI video generation creates moving visual content from instructions
+such as text or images, using learned models of appearance and motion.
+
+CORE THEORY
+- Text-to-video: describe a scene and generate a video from it.
+- Image-to-video: use an image as a visual starting point for motion.
+- Frame: one still image within a video sequence.
+- Temporal consistency: maintaining objects, identity and scene details
+  coherently across frames as time passes.
+- Diffusion models: a model family that can generate content by learning
+  to reverse a noise process. Not every video tool uses the same architecture.
+- Transformers: architectures used to model relationships in data sequences.
+
+The manual names Runway, Pika, Synthesia, Canva, InVideo and Lumen5.
+They illustrate different workflows, including generated scenes, avatars
+and assembling videos from assets. They do not all work identically.
+Names here are manual examples, not a claim about current plans or features.
+
+WORKING / PRACTICE STEPS
+1. Define the subject, action, setting and intended visual style.
+2. Add camera motion, lighting and duration where supported.
+3. Submit the prompt to the chosen tool and inspect its output.
+4. Check motion, scene consistency, visual artifacts and prompt adherence.
+5. Refine the prompt and compare results.
+6. Save the final result and describe its intended use and limitations.
+
+EXAMPLE PROMPT
+"A clay-style bear cooking breakfast in a small kitchen, warm morning
+light, fixed camera, gentle movements, five-second scene."
+Expected concept: a short animated cooking scene. The actual result
+depends on the model and settings; this is not a generated-output report.
+
+LIKELY VIVA QUESTIONS
+Q: Why is video generation harder than image generation?
+A: It must generate plausible motion and keep multiple frames consistent.
+
+Q: What is a deepfake?
+A: Synthetic or altered media that imitates a person's appearance or voice.
+
+Q: What makes a good video prompt?
+A: A clear subject, action, setting, style and camera instruction.
+
+Q: Common limitations?
+A: Identity drift, unnatural motion, implausible physics and visual artifacts.
+
+Q: What should you evaluate?
+A: Prompt match, temporal consistency, motion quality and suitability for use.
+
+APPLICATIONS AND CONCLUSION
+Educational visualization, storyboarding, advertising and creative scenes.
+Consider consent, bias, misleading content, copyright and disclosure.
+
+REMEMBER: subject + action + setting + camera + consistency.

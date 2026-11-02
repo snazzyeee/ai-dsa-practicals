@@ -1,0 +1,60 @@
+============================================================
+AI PRACTICAL 1 - RULE-BASED EXPERT SYSTEM
+============================================================
+Source: SE_AI_LAB_MANUAL.pdf, assignment 1, PDF pages 7-12.
+Revision notes based on the manual; viva questions are study aids.
+
+AIM
+Build an expert system that makes simple decisions using IF-THEN rules.
+
+SAY THIS IN VIVA
+An expert system uses stored knowledge and an inference engine to
+make decisions in a specific domain, similar to a human expert.
+
+CORE THEORY
+- Knowledge base: the facts and rules available to the system.
+- Fact: something known, such as "the user has a cough".
+- Rule: an IF condition followed by a THEN conclusion.
+- Inference engine: checks which rules apply and derives conclusions.
+- User interface: collects input and presents the result.
+- Working facts: the information currently available for reasoning.
+
+Forward chaining is data-driven: start with facts and apply rules
+to obtain conclusions. New conclusions can trigger further rules.
+Backward chaining is goal-driven: start with a proposed conclusion
+and check whether its required facts or subgoals can be established.
+
+WORKING / ALGORITHM
+1. Define the facts required by each rule and its conclusion.
+2. Read the user's information and normalize it for comparison.
+3. Check whether every required fact of a rule is present.
+4. If so, derive its conclusion; continue if more rules can apply.
+5. Display matching conclusions, or state that no rule matches.
+
+EXAMPLE
+Rule: IF fever AND cough, THEN suggest the example label "flu".
+Input facts: fever, cough.
+Result: this rule matches because both conditions are present.
+These classroom rules illustrate reasoning, not reliable diagnosis.
+
+LIKELY VIVA QUESTIONS
+Q: Does an expert system necessarily learn automatically?
+A: No. A basic rule-based system uses rules supplied by people.
+
+Q: Knowledge base versus inference engine?
+A: The knowledge base stores knowledge; the engine applies it.
+
+Q: Forward versus backward chaining?
+A: Facts to conclusions versus a goal back to supporting facts.
+
+Q: What if several rules match?
+A: Show multiple conclusions or use a defined rule-priority policy.
+
+Q: Main advantage and limitation?
+A: Rules are explainable, but missing or incorrect knowledge limits results.
+
+APPLICATIONS AND CONCLUSION
+Troubleshooting, advisory systems and domain-specific decision support.
+The quality of decisions depends on the quality of facts and rules.
+
+REMEMBER: facts + rules + inference engine = conclusions.

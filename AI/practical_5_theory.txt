@@ -1,0 +1,61 @@
+============================================================
+AI PRACTICAL 5 - MINIMAX
+============================================================
+Source: SE_AI_LAB_MANUAL.pdf, assignment 5, PDF pages 33-40.
+Revision notes based on the manual; viva questions are study aids.
+
+AIM
+Choose moves in a two-player deterministic game using minimax.
+The manual demonstrates Tic-Tac-Toe with AI as X and the human as O.
+
+SAY THIS IN VIVA
+Minimax chooses the best move assuming the opponent also plays optimally.
+MAX maximizes the score, while MIN minimizes it.
+
+CORE THEORY
+- Adversarial search: search in a competitive environment with an opponent.
+- Game tree: states are nodes; legal moves are edges.
+- Deterministic: a move has a predictable result, without random outcomes.
+- Perfect information: both players can observe the complete game state.
+- Zero-sum: one player's gain is the other player's loss.
+- Terminal state: a win, loss or draw where play ends.
+- Utility: a numerical score for the outcome, measured from MAX's viewpoint.
+
+Tic-Tac-Toe scores can be positive for an AI win, negative for a human
+win and zero for a draw. Depth-adjusted scores can prefer quicker wins
+and delay unavoidable losses. Depth-limited search uses an evaluation
+function when it cannot search all the way to terminal states.
+
+WORKING / ALGORITHM
+1. If the board is terminal, return its score.
+2. At MAX's turn, try every legal move and return the highest child score.
+3. At MIN's turn, try every legal move and return the lowest child score.
+4. Undo each trial move before exploring another.
+5. At the root, choose the move with the best score for the AI.
+
+EXAMPLE
+One move lets the opponent choose outcomes 3 or 5: MIN returns 3.
+Another lets the opponent choose 2 or 9: MIN returns 2.
+MAX chooses the first move because max(3, 2) is 3.
+
+LIKELY VIVA QUESTIONS
+Q: Why assume an optimal opponent?
+A: It chooses a move against the strongest response, rather than relying on mistakes.
+
+Q: Why undo a trial move?
+A: Each branch must start from the same board position.
+
+Q: What are the base cases?
+A: AI win, opponent win, draw, or a chosen depth limit.
+
+Q: Time complexity?
+A: O(b^d), where b is branching factor and d is search depth.
+
+Q: Does minimax always win Tic-Tac-Toe?
+A: No. Against perfect play, the game is a draw; optimal play avoids losing.
+
+APPLICATIONS AND CONCLUSION
+Tic-Tac-Toe and other turn-based, competitive games.
+The main drawback is the rapidly growing number of game states.
+
+REMEMBER: MAX picks the highest; MIN picks the lowest.

@@ -1,0 +1,66 @@
+============================================================
+AI PRACTICAL 7 - CHATGPT AND ITS USAGE
+============================================================
+Source: SE_AI_LAB_MANUAL.pdf, assignment 7, PDF pages 49-51.
+Revision notes based on the manual; viva questions are study aids.
+This is a conceptual study guide, not a record of experiments performed.
+
+AIM
+Explore conversational AI for writing, coding, summarizing and brainstorming.
+
+SAY THIS IN VIVA
+ChatGPT is OpenAI's conversational AI application. It can respond to
+natural-language instructions and help with tasks such as explaining,
+drafting, summarizing and coding.
+
+CORE THEORY
+- AI: the broad field of building systems that perform intelligent tasks.
+- Generative AI: systems that create content such as text, images or video.
+- NLP: Natural Language Processing; working with human language.
+- LLM: Large Language Model; a model trained to process and generate language.
+- GPT: Generative Pre-trained Transformer.
+- Transformer: a neural-network architecture using attention to relate tokens.
+- Token: a unit of text, which may be a word, part of a word or punctuation.
+- Context: the information available in the current interaction.
+- Hallucination: a plausible-sounding output that is incorrect or unsupported.
+
+The manual introduces pretraining, conversational refinement and RLHF
+(Reinforcement Learning from Human Feedback). These are training concepts;
+typing a prompt does not itself retrain the model's weights.
+
+WORKING / PRACTICE STEPS
+1. Choose a task and provide the necessary context.
+2. State the desired answer format, audience and length.
+3. Read the response and check whether it meets the task.
+4. Verify factual claims and test generated code where relevant.
+5. Refine unclear instructions and compare the improved response.
+
+EXAMPLE PROMPTS
+Explanation: "Explain BFS to a beginner using a queue example."
+Summary: "Summarize the following passage in five bullet points: [passage]."
+Coding: "Write bubble sort in Python and explain its loop limits."
+These are suggested exercises, not claims that outputs were generated.
+
+LIKELY VIVA QUESTIONS
+Q: ChatGPT versus a rule-based expert system?
+A: An expert system applies explicit domain rules; an LLM generates responses
+   from learned patterns and context rather than a fixed IF-THEN rule list.
+
+Q: Can a confident answer be wrong?
+A: Yes. Confidence in wording does not establish factual correctness.
+
+Q: Why does prompt quality matter?
+A: Clear context and instructions help specify the response needed.
+
+Q: Does it learn permanently from each conversation?
+A: Conversation context can guide replies, but that is different from retraining.
+
+Q: How should it be used responsibly?
+A: Review output, protect confidential information, follow assessment rules
+   and acknowledge AI assistance where required.
+
+APPLICATIONS AND CONCLUSION
+Tutoring, drafting, translation, brainstorming and programming assistance.
+It is useful for assistance, but generated content needs human review.
+
+REMEMBER: clear task + context + format + verification.

@@ -1,0 +1,67 @@
+============================================================
+AI PRACTICAL 10 - PROMPT ENGINEERING
+============================================================
+Source: SE_AI_LAB_MANUAL.pdf, assignment 10, PDF pages 58-60.
+Revision notes based on the manual; viva questions are study aids.
+
+AIM
+Design and refine prompts to obtain more useful, relevant AI responses.
+
+SAY THIS IN VIVA
+Prompt engineering means writing and improving instructions and context
+to guide an AI system toward the response required for a task.
+
+CORE THEORY
+A useful prompt identifies the task, relevant context, intended audience,
+constraints and output format. Examples can demonstrate the desired pattern.
+Specific instructions improve clarity but do not guarantee factual accuracy.
+
+TECHNIQUES FROM THE MANUAL
+- Zero-shot: request a task without giving examples.
+  Example: "Translate 'Good morning' into French."
+- Few-shot: give examples of the task before asking for another answer.
+  Example: "happy -> positive; terrible -> negative; excellent -> ?"
+- Role prompting: specify a useful viewpoint or teaching role.
+  Example: "Act as a beginner-friendly tutor and explain queues."
+- Constraint-based: specify limits such as length, tone or format.
+  Example: "Explain BFS in three points, using at most 80 words."
+- Step-by-step explanation: ask for an understandable solution outline.
+  The manual calls this chain-of-thought prompting. For revision, request
+  key steps and a checked answer; a generated explanation is not proof
+  of correctness or a direct view of a model's internal reasoning.
+
+WORKING / PRACTICE STEPS
+1. Define the result you need and the audience receiving it.
+2. Write the task and supply relevant source material or context.
+3. Add format, length and other constraints.
+4. Add examples if the desired pattern is otherwise unclear.
+5. Inspect the response for relevance, correctness and instruction following.
+6. Revise the unclear part of the prompt and compare responses.
+
+EXAMPLE
+Vague: "Explain AI."
+Improved: "Explain artificial intelligence to a first-year student in
+100 words. Give two everyday examples and avoid technical jargon."
+
+LIKELY VIVA QUESTIONS
+Q: Zero-shot versus few-shot?
+A: Zero-shot provides no examples; few-shot supplies example inputs and outputs.
+
+Q: Prompting versus fine-tuning?
+A: Prompting changes the input context; fine-tuning updates model weights
+   through additional training.
+
+Q: Why use role prompting?
+A: It helps specify the viewpoint, language and depth of the response.
+
+Q: Can a good prompt eliminate hallucinations?
+A: No. Verify important claims and provide reliable source material where useful.
+
+Q: How do you judge whether a prompt improved?
+A: Compare correctness, relevance, clarity and adherence to the requested format.
+
+APPLICATIONS AND CONCLUSION
+Tutoring, summarization, drafting, coding and image/video instructions.
+Prompt engineering is iterative: write, inspect, revise and verify.
+
+REMEMBER: task + context + audience + constraints + format + review.

@@ -1,0 +1,64 @@
+============================================================
+AI PRACTICAL 2 - BFS AND DFS MAZE SOLVER
+============================================================
+Source: SE_AI_LAB_MANUAL.pdf, assignment 2, PDF pages 13-20.
+Revision notes based on the manual; viva questions are study aids.
+
+AIM
+Solve a maze using BFS and DFS and compare their search behavior.
+
+SAY THIS IN VIVA
+BFS explores level by level using a queue. DFS explores a branch
+deeply before backtracking, using a stack or recursion.
+
+CORE THEORY
+A search problem has an initial state, goal state and possible actions.
+In a maze, a state is a cell and an action is a legal move to a neighbor.
+Walls and out-of-bounds positions cannot be visited.
+
+Both algorithms are uninformed: they do not use a distance-to-goal heuristic.
+- BFS: FIFO queue; explores all distance-1 cells before distance-2 cells.
+- DFS: LIFO stack; explores the newest pending cell first.
+- Visited set: prevents repeated exploration and cycles.
+- Parent map: remembers how each cell was reached to reconstruct a path.
+
+WORKING / ALGORITHM
+BFS:
+1. Add the start to a queue and mark it discovered.
+2. Remove the oldest cell; stop if it is the goal.
+3. Add undiscovered, open neighbors and record their parents.
+4. Repeat until the goal is found or the queue is empty.
+
+DFS:
+1. Put the start on a stack and mark it discovered.
+2. Remove the newest cell; stop if it is the goal.
+3. Push undiscovered, open neighbors and record their parents.
+4. Repeat until the goal is found or the stack is empty.
+
+EXAMPLE
+If one route needs 4 moves and another needs 7, BFS returns a
+4-move route when all moves cost the same. DFS may find either route,
+depending on the order in which neighbors are explored.
+
+LIKELY VIVA QUESTIONS
+Q: Which guarantees the shortest path?
+A: BFS for an unweighted graph or equal-cost moves; DFS does not.
+
+Q: Why keep visited cells?
+A: To avoid loops and exploring the same state repeatedly.
+
+Q: Is DFS complete?
+A: On a finite graph with visited tracking, it finds a reachable goal.
+   Without suitable cycle handling, or on an infinite branch, it may fail.
+
+Q: What is the time complexity?
+A: O(V + E) with adjacency lists. A four-neighbor grid is O(rows * columns).
+
+Q: How do you print the path?
+A: Follow parent links backward from the goal, then reverse the result.
+
+APPLICATIONS AND CONCLUSION
+Maze solving, reachability and graph traversal. BFS suits minimum-step
+paths; DFS suits deep exploration and backtracking tasks.
+
+REMEMBER: BFS = queue = breadth; DFS = stack = depth.

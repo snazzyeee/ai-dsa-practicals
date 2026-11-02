@@ -1,0 +1,61 @@
+============================================================
+AI PRACTICAL 6 - MINIMAX WITH ALPHA-BETA PRUNING
+============================================================
+Source: SE_AI_LAB_MANUAL.pdf, assignment 6, PDF pages 41-48.
+Revision notes based on the manual; viva questions are study aids.
+
+AIM
+Reduce minimax evaluations by pruning branches that cannot affect the decision.
+
+SAY THIS IN VIVA
+Alpha-beta pruning improves minimax by skipping branches that cannot
+change the final minimax value. It keeps the same optimal result.
+
+CORE THEORY
+- Alpha: the best score MAX can already guarantee; a lower bound.
+- Beta: the best score MIN can already guarantee; an upper bound.
+- Initialize alpha to negative infinity and beta to positive infinity.
+- MAX updates alpha using the maximum score seen so far.
+- MIN updates beta using the minimum score seen so far.
+- Prune when alpha >= beta, equivalently beta <= alpha.
+
+Pruning saves work because a player already has an alternative that is
+at least as good. It does not mean the skipped branch is invalid.
+Different move orders change how much can be pruned, not the minimax value.
+Equally good moves may be selected differently when move order changes.
+
+WORKING / ALGORITHM
+1. Check for a terminal state and return its utility.
+2. At a MAX node, evaluate children and update best and alpha.
+3. At a MIN node, evaluate children and update best and beta.
+4. Pass the current bounds down the recursive search.
+5. Stop checking remaining children when alpha >= beta.
+6. Undo trial moves and return the best value found at this node.
+
+EXAMPLE
+MAX already has a move worth 3, so alpha is 3.
+In another branch, MIN finds a child worth 2, so beta becomes 2.
+MIN's result there can only stay at 2 or decrease as more children are checked.
+Since beta <= alpha, MAX will not prefer that branch; skip its remaining children.
+
+LIKELY VIVA QUESTIONS
+Q: Main difference from ordinary minimax?
+A: The evaluation logic is the same, but irrelevant branches are skipped.
+
+Q: What is the pruning condition?
+A: alpha >= beta.
+
+Q: Does pruning change the optimal minimax score?
+A: No, when applied correctly to the same search tree and evaluation.
+
+Q: Best-case and worst-case time?
+A: With excellent move ordering, O(b^(d/2)); worst case remains O(b^d).
+
+Q: Why does move ordering matter?
+A: Finding strong moves early creates tighter bounds and more cutoffs.
+
+APPLICATIONS AND CONCLUSION
+Game-tree search, including the manual's Tic-Tac-Toe example.
+Pruning makes deeper search practical without changing the decision rule.
+
+REMEMBER: MAX raises alpha; MIN lowers beta; prune when they meet or cross.

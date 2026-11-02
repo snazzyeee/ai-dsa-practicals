@@ -1,0 +1,65 @@
+============================================================
+AI PRACTICAL 4 - CONSTRAINT SATISFACTION PROBLEM (CSP)
+============================================================
+Source: SE_AI_LAB_MANUAL.pdf, assignment 4, PDF pages 27-32.
+Revision notes based on the manual; viva questions are study aids.
+
+AIM
+Solve map coloring using backtracking with constraint propagation.
+The manual uses Australian regions, MRV and the AC-3 algorithm.
+
+SAY THIS IN VIVA
+A CSP assigns values to variables from their domains so that all
+constraints are satisfied.
+
+CORE THEORY
+- Variables: things to assign, such as map regions WA, NT and SA.
+- Domains: possible values, such as red, green and blue.
+- Constraints: restrictions, such as adjacent regions having different colors.
+- Assignment: a chosen value for a variable.
+- Backtracking: undo a failed choice and try another value.
+- MRV: Minimum Remaining Values; choose the variable with the fewest
+  currently legal values, exposing difficult choices early.
+- Constraint propagation: remove domain values ruled out by constraints.
+
+AC-3 / ARC CONSISTENCY
+For a directed arc X -> Y, every remaining value of X must have at least
+one supporting value of Y that satisfies the constraint between them.
+AC-3 repeatedly removes unsupported values and revisits affected arcs.
+If a domain becomes empty, that branch cannot produce a solution.
+Arc consistency alone does not guarantee that the whole CSP is solvable.
+
+WORKING / ALGORITHM
+1. Define the regions, their colors and neighboring regions.
+2. If all regions are assigned, return the solution.
+3. Choose an unassigned region using MRV.
+4. Try a color consistent with already assigned neighbors.
+5. Restrict its domain to that color and run AC-3 on copied domains.
+6. Recurse if propagation succeeds; otherwise undo the choice.
+7. Try another color, or backtrack if none works.
+
+EXAMPLE
+If WA is red and WA borders NT, remove red from NT's possible colors.
+NT can still be green or blue. If no color remains, undo an earlier choice.
+
+LIKELY VIVA QUESTIONS
+Q: What are the three parts of a CSP?
+A: Variables, domains and constraints.
+
+Q: Why use propagation with backtracking?
+A: It detects impossible choices earlier and reduces unnecessary search.
+
+Q: What does AC-3 stand for?
+A: Arc Consistency Algorithm 3.
+
+Q: Why copy domains before trying a color?
+A: So failed branches do not permanently remove values needed by other branches.
+
+Q: Other CSP examples?
+A: Sudoku, timetable scheduling and the N-Queens problem.
+
+APPLICATIONS AND CONCLUSION
+CSPs model problems through restrictions rather than a fixed sequence of moves.
+Backtracking searches; MRV and AC-3 reduce the search needed.
+
+REMEMBER: variables + domains + constraints; assign, propagate, backtrack.

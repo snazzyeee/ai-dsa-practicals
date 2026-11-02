@@ -1,0 +1,65 @@
+============================================================
+AI PRACTICAL 9 - AI IMAGE GENERATORS
+============================================================
+Source: SE_AI_LAB_MANUAL.pdf, assignment 9, PDF pages 55-57.
+Revision notes based on the manual; viva questions are study aids.
+This is a conceptual study guide, not a record of experiments performed.
+
+AIM
+Study text-to-image generation and how prompt design affects visual output.
+
+SAY THIS IN VIVA
+An AI image generator creates an image from a description by using
+patterns learned during training to produce matching visual content.
+
+CORE THEORY
+- Text-to-image: natural-language instructions guide image generation.
+- Embedding: a numerical representation of information, such as prompt meaning.
+- Latent space: a learned representation where a model can encode information.
+- Diffusion: generation by learning to reverse a noise process, often using
+  a compressed representation rather than working directly on every pixel.
+- GAN: Generative Adversarial Network; a generator and discriminator are
+  trained in competition. It is another generative-model approach.
+- Style: visual treatment, such as watercolor, cartoon or photorealistic.
+- Composition: how subjects and other elements are arranged in the frame.
+
+The manual names DALL-E, Stable Diffusion, Midjourney and Adobe Firefly.
+These are examples from the manual, not a current feature or pricing comparison.
+Different tools may use different model architectures and interfaces.
+
+WORKING / PRACTICE STEPS
+1. Choose the subject and purpose of the image.
+2. Describe its setting, style, lighting and composition.
+3. Generate the image and inspect whether the details match.
+4. Check for artifacts, unwanted content and missing instructions.
+5. Refine the prompt and compare results.
+6. Save the selected result and explain the changes you requested.
+
+EXAMPLE
+Vague: "A cat."
+More specific: "A white cat on a wooden windowsill at sunset,
+warm lighting, watercolor style, close-up composition."
+The second prompt gives more concrete visual direction, though exact
+results are not guaranteed. No image-generation experiment is claimed here.
+
+LIKELY VIVA QUESTIONS
+Q: Image generation versus image classification?
+A: Generation creates an image; classification assigns a label to an image.
+
+Q: Why does changing a prompt change the result?
+A: The prompt changes the information conditioning the generation process.
+
+Q: Can the same prompt give different images?
+A: Yes. Sampling choices and randomness can produce different results.
+
+Q: Is every image generator a GAN?
+A: No. Diffusion and transformer-based approaches are also used.
+
+Q: Common limitations and ethical concerns?
+A: Visual artifacts, bias, misleading images, privacy and copyright concerns.
+
+APPLICATIONS AND CONCLUSION
+Concept art, learning materials, design exploration and product mockups.
+Clear descriptions improve control; review output and disclose AI use as needed.
+
+REMEMBER: subject + setting + style + lighting + composition.
